@@ -67,7 +67,7 @@ export function NavBar() {
     ));
 
     return (
-        <Box pb={120}>
+        <Box className="shadow-sm">
             <header className={classes.header}>
                 <Group justify="space-between" h="100%">
                     <Image src={Logo} alt="OJFP Logo" className="w-10 h-10" />
