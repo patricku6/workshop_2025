@@ -46,7 +46,6 @@ const mockdata = [
 export function NavBar() {
     const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] = useDisclosure(false);
     const [linksOpened, { toggle: toggleLinks }] = useDisclosure(false);
-    const theme = useMantineTheme();
 
     const links = mockdata.map((item) => (
         <UnstyledButton className={classes.subLink} key={item.title}>
@@ -114,8 +113,8 @@ export function NavBar() {
                                                 Registreer nu en ontvang 10% korting op je eerste bestelling
                                             </Text>
                                         </div>
-                                        <Button variant="default">Log in</Button>
-                                        <Button>Sign up</Button>
+                                        <Button variant="default">Login</Button>
+                                        <Button>Registreer</Button>
                                     </Group>
                                 </div>
                             </HoverCard.Dropdown>
@@ -124,14 +123,14 @@ export function NavBar() {
 
                     <Group visibleFrom="sm">
                     <Autocomplete
-                            placeholder="Zoek op fiets"
-                            leftSection={<IconSearch size={16} stroke={1.5} />}
-                            data={['Gazelle', 'Giant', 'Batavus', 'Sparta', 'Trek', 'Pegasus', 'Bulls']}
-                            visibleFrom="xs"
-                        />
-                        <Button variant="default">Log in</Button>
-                        <Button>Sign up</Button>
-                    </Group>
+                    placeholder="Zoek op fiets"
+                    leftSection={<IconSearch size={16} stroke={1.5} />}
+                    data={['Gazelle', 'Giant', 'Batavus', 'Sparta', 'Trek', 'Pegasus', 'Bulls']}
+                    visibleFrom="xs"
+                />
+                    <Button variant="default">Login</Button>
+                    <Button>Registreer</Button>
+                </Group>
 
                     <Burger opened={drawerOpened} onClick={toggleDrawer} hiddenFrom="sm" />
                 </Group>

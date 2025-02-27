@@ -16,6 +16,7 @@
         "vite": "^6.0.11"
     },
     "dependencies": {
+        "@coreui/react": "^5.5.0",
         "@inertiajs/react": "^2.0.3",
         "@mantine/carousel": "^7.16.2",
         "@mantine/charts": "^7.16.2",
@@ -35,10 +36,13 @@
         "@tiptap/pm": "^2.11.5",
         "@tiptap/react": "^2.11.5",
         "@tiptap/starter-kit": "^2.11.5",
+        "components": "^0.1.0",
         "dayjs": "^1.11.13",
         "embla-carousel-react": "^7.1.0",
         "react": "^18.0.0",
+        "react-bootstrap": "^2.10.9",
         "react-dom": "^18.0.0",
+        "react-multi-carousel": "^2.8.5",
         "recharts": "^2.15.1"
     }
 }
