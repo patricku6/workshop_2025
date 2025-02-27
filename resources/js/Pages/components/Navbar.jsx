@@ -72,7 +72,7 @@ export function NavBar() {
                     <Image src={Logo} alt="OJFP Logo" className="w-10 h-10" />
 
                     <Group h="100%" gap={0} visibleFrom="sm">
-                        <a href="#" className={classes.link}>
+                        <a href="/" className={classes.link}>
                             Home
                         </a>
                         <HoverCard width={600} position="bottom" radius="md" shadow="md" withinPortal>
@@ -92,7 +92,7 @@ export function NavBar() {
                             <HoverCard.Dropdown style={{overflow: 'hidden'}}>
                                 <Group justify="space-between" px="md">
                                     <Text fw={500}>Categorieën</Text>
-                                    <Anchor href="#" fz="xs">
+                                    <Anchor href="#" fz="xs" color="#1c64f2">
                                         Bekijk alle categorieën
                                     </Anchor>
                                 </Group>
@@ -113,8 +113,8 @@ export function NavBar() {
                                                 Registreer nu en ontvang 10% korting op je eerste bestelling
                                             </Text>
                                         </div>
-                                        <Button variant="default">Login</Button>
-                                        <Button>Registreer</Button>
+                                        <Button variant="default" style={{ backgroundColor: '#1c64f2', color: 'white' }}>Login</Button>
+                                        <Button style={{ backgroundColor: '#1c64f2', color: 'white' }}>Registreer</Button>
                                     </Group>
                                 </div>
                             </HoverCard.Dropdown>
@@ -122,15 +122,15 @@ export function NavBar() {
                     </Group>
 
                     <Group visibleFrom="sm">
-                    <Autocomplete
-                    placeholder="Zoek op fiets"
-                    leftSection={<IconSearch size={16} stroke={1.5} />}
-                    data={['Gazelle', 'Giant', 'Batavus', 'Sparta', 'Trek', 'Pegasus', 'Bulls']}
-                    visibleFrom="xs"
-                />
-                    <Button variant="default">Login</Button>
-                    <Button>Registreer</Button>
-                </Group>
+                        <Autocomplete
+                            placeholder="Zoek op fiets"
+                            leftSection={<IconSearch size={16} stroke={1.5} color="#1c64f2" />}
+                            data={['Gazelle', 'Giant', 'Batavus', 'Sparta', 'Trek', 'Pegasus', 'Bulls']}
+                            visibleFrom="xs"
+                        />
+                        <Button variant="default" style={{ backgroundColor: '#1c64f2', color: 'white' }}>Login</Button>
+                        <Button style={{ backgroundColor: '#1c64f2', color: 'white' }}>Registreer</Button>
+                    </Group>
 
                     <Burger opened={drawerOpened} onClick={toggleDrawer} hiddenFrom="sm" />
                 </Group>
@@ -163,26 +163,8 @@ export function NavBar() {
                     <Divider my="sm" />
 
                     <Group justify="center" grow pb="xl" px="md">
-                        <Autocomplete
-                            placeholder="Zoek op fiets"
-                            leftSection={<IconSearch size={16} stroke={1.5} />}
-                            data={['React', 'Angular', 'Vue', 'Next.js', 'Riot.js', 'Svelte', 'Blitz.js']}
-                            visibleFrom="xs"
-                        />
-                        <Group justify="space-between" align="left">
-                            <div>
-                                <Text fw={500} fz="sm">
-                                    Login of registreer om te bestellen
-                                </Text>
-                                <Text size="xs" c="dimmed">
-                                    Registreer nu en ontvang 10% korting op je eerste bestelling
-                                </Text>
-                            </div>
-                            <div className="flex gap-2">
-                                <Button variant="default">Log in</Button>
-                                <Button>Sign up</Button>
-                            </div>
-                        </Group>
+                        <Button style={{ backgroundColor: '#1c64f2', color: 'white' }}>Log in</Button>
+                        <Button style={{ backgroundColor: '#1c64f2', color: 'white' }}>Sign up</Button>
                     </Group>
                 </ScrollArea>
             </Drawer>
