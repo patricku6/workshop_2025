@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Middleware\VerifyAdmin;
 use Illuminate\Support\Facades\Route;
@@ -25,6 +26,7 @@ Route::post('/authenticate', [AuthController::class, 'authenticate'])->name('aut
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::get('/admin/dashboard', function () {
-    return Inertia::render('AdminDashboard');
-})->name('admin.dashboard')->middleware(VerifyAdmin::class, 'auth');
+Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard')->middleware(VerifyAdmin::class, 'auth');
+Route::get('/admin/users', [AdminController::class, 'users'])->name('admin.users')->middleware(VerifyAdmin::class, 'auth');
+Route::post('/admin/users/update', [AdminController::class, 'updateUsers'])->name('admin.users.update')->middleware(VerifyAdmin::class, 'auth');
+Route::post('/admin/users/delete', [AdminController::class, 'deleteUsers'])->name('admin.users.delete')->middleware(VerifyAdmin::class, 'auth');
