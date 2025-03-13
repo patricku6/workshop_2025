@@ -1,7 +1,9 @@
+import { useEffect, useState } from "react";
 import {
     IconChevronDown,
     IconGenderFemale, IconGenderMale, IconMoodKid,
     IconSearch,
+    IconStar,
 } from '@tabler/icons-react';
 import {
     Anchor, Autocomplete,
@@ -19,11 +21,12 @@ import {
     Text,
     ThemeIcon,
     UnstyledButton,
-    useMantineTheme,
+    Avatar,
+    Menu,
 } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
 import Logo from '../../../../public/images/logo.png';
 import classes from './NavBar.module.css';
+import {useDisclosure} from "@mantine/hooks";
 
 const mockdata = [
     {
@@ -46,6 +49,69 @@ const mockdata = [
 export function NavBar() {
     const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] = useDisclosure(false);
     const [linksOpened, { toggle: toggleLinks }] = useDisclosure(false);
+    const [loggedIn, setLoggedIn] = useState(false);
+    const [initials, setInitials] = useState('');
+
+    // Fetch logged-in user status
+    const fetchLoggedInUser = async () => {
+        const response = await fetch('/isLoggedIn', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (response.ok) {
+            return response.json();
+        }
+
+        return null;
+    }
+
+    // Fetch user's initials
+    const fetchInitials = async () => {
+        const response = await fetch('/getInitials', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (response.ok) {
+            return response.json();
+        }
+
+        return null
+    }
+
+    // Fetch data after component is mounted
+    useEffect(() => {
+        const fetchData = async () => {
+            const userData = await fetchLoggedInUser();
+            setLoggedIn(userData === 1);
+
+            const initialsData = await fetchInitials();
+            setInitials(initialsData?.initials || '');
+        };
+
+        fetchData();
+    }, []);
+
+    const logout = async () => {
+        const response = await fetch('/logout', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (response.ok) {
+            document.location.href = '/';
+        }
+    }
 
     const links = mockdata.map((item) => (
         <UnstyledButton className={classes.subLink} key={item.title}>
@@ -128,8 +194,27 @@ export function NavBar() {
                             data={['Gazelle', 'Giant', 'Batavus', 'Sparta', 'Trek', 'Pegasus', 'Bulls']}
                             visibleFrom="xs"
                         />
-                        <Button variant="filled" color="#1c64f2" onClick={() => { document.location.href = '/login'; }}>Log in</Button>
-                        <Button  variant="filled" color="#1c64f2" onClick={() => { document.location.href = '/register'; }}>Registreer</Button>
+                        {!loggedIn && (
+                            <>
+                                <Button variant="filled" color="#1c64f2" onClick={() => { document.location.href = '/login'; }}>Log in</Button>
+                                <Button variant="filled" color="#1c64f2" onClick={() => { document.location.href = '/register'; }}>Registreer</Button>
+                            </>
+                        )}
+                        {loggedIn && (
+                            <Menu shadow="md" width={200}>
+                                <Menu.Target>
+                                    <Avatar color="cyan" radius="xl" style={{ cursor: 'pointer' }}>
+                                        {initials}
+                                    </Avatar>
+                                </Menu.Target>
+
+                                <Menu.Dropdown>
+                                    <Menu.Item onClick={() => { document.location.href = '/profile' }}>Profiel</Menu.Item>
+                                    <Menu.Divider />
+                                    <Menu.Item onClick={logout}>Uitloggen</Menu.Item>
+                                </Menu.Dropdown>
+                            </Menu>
+                        )}
                     </Group>
 
                     <Burger opened={drawerOpened} onClick={toggleDrawer} hiddenFrom="sm" />
