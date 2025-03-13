@@ -11,23 +11,31 @@ export default function Home() {
     return (
         <>
             <Template />
-            <Container size="lg" py="xl">
+            <Container size="lg" py="xl" className="select-none">
                 {/* Hero Section */}
-                <Title align="center" my="lg" color="#1c64f2">Welkom bij FietsenWinkel</Title>
+                <Title align="center" my="lg" color="#1c64f2">Welkom bij OFJP</Title>
                 <Text align="center" size="lg" color="dimmed">De beste fietsen voor elk avontuur</Text>
 
                 {/* Carousel Slider */}
                 <Carousel withIndicators height={400} mt="lg"
                           plugins={[autoplay.current]}
+                          loop
                           onMouseEnter={autoplay.current.stop}
-                          onMouseLeave={autoplay.current.reset}>
+                          onMouseLeave={autoplay.current.reset}
+                >
 
                     <Carousel.Slide>
-                        <Image
-                            src="https://images.pexels.com/photos/100582/pexels-photo-100582.jpeg"
-                            alt="Fiets 1"
-                            style={{ objectFit: 'cover', display: 'block', margin: 'auto', height: '100%' }}
-                        />
+                            <Image
+                                src="https://images.pexels.com/photos/100582/pexels-photo-100582.jpeg"
+                                alt="Fiets 1"
+                                style={{
+                                    objectFit: 'cover',
+                                    width: '100%',
+                                    height: '100%',
+                                    display: 'block',
+                                    margin: 'auto',
+                                }}
+                            />
                     </Carousel.Slide>
                     <Carousel.Slide>
                         <Image
@@ -49,7 +57,7 @@ export default function Home() {
                 <Title order={2} mt="xl" color="#1c64f2">Onze Populaire Fietsen</Title>
                 <Grid mt="md">
                     <Grid.Col span={4}>
-                        <Card shadow="sm" padding="lg" radius="md" withBorder>
+                        <Card shadow="sm" padding="lg" radius="md" withBorder className="hover:scale-105 transition-all">
                             <Card.Section>
                                 <Image src="https://plus.unsplash.com/premium_photo-1678718713393-2b88cde9605b?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Racefiets" />
                             </Card.Section>
@@ -59,7 +67,7 @@ export default function Home() {
                         </Card>
                     </Grid.Col>
                     <Grid.Col span={4}>
-                        <Card shadow="sm" padding="lg" radius="md" withBorder>
+                        <Card shadow="sm" padding="lg" radius="md" withBorder className="hover:scale-105 transition-all">
                             <Card.Section>
                                 <Image src="https://plus.unsplash.com/premium_photo-1671148894611-3c91b6d3c92a?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8bW91bnRhaW4lMjBiaWtlfGVufDB8fDB8fHww" alt="Mountainbike" />
                             </Card.Section>
@@ -69,7 +77,7 @@ export default function Home() {
                         </Card>
                     </Grid.Col>
                     <Grid.Col span={4}>
-                        <Card shadow="sm" padding="lg" radius="md" withBorder>
+                        <Card shadow="sm" padding="lg" radius="md" withBorder className="hover:scale-105 transition-all">
                             <Card.Section>
                                 <Image src="https://images.unsplash.com/photo-1632082565410-a692ab2537c4?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTl8fG9tYSUyMGZpZXRzfGVufDB8fDB8fHww" alt="Stadsfiets" />
                             </Card.Section>
