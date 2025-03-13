@@ -70,5 +70,18 @@ class AuthController extends Controller
 
         return redirect()->route('login');
     }
+
+    public function isLoggedIn()
+    {
+        return auth()->check();
+    }
+
+    public function getInitials()
+    {
+        $user = auth()->user();
+        $name = $user->name;
+        $initials = $name[0] . $name[1];
+        return response()->json(['initials' => $initials]);
+    }
 }
 
