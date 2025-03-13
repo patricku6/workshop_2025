@@ -10,7 +10,7 @@ use Closure;
 
 class VerifyAdmin extends Middleware
 {
-    public function handle(Request $request, Closure $next): RedirectResponse
+    public function handle(Request $request, Closure $next): Response
     {
         $user = auth()->user();
 

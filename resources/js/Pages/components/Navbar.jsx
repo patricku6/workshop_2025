@@ -66,10 +66,10 @@ export function NavBar() {
     ));
 
     return (
-        <Box className="shadow-sm">
+        <Box className="shadow-sm select-none">
             <header className={classes.header}>
                 <Group justify="space-between" h="100%">
-                    <Image src={Logo} alt="OJFP Logo" className="w-10 h-10" />
+                    <Image src={Logo} alt="OJFP Logo" className="w-10 h-10 cursor-pointer" onClick={() => { document.location.href = '/'; }} />
 
                     <Group h="100%" gap={0} visibleFrom="sm">
                         <a href="/" className={classes.link}>
@@ -128,8 +128,8 @@ export function NavBar() {
                             data={['Gazelle', 'Giant', 'Batavus', 'Sparta', 'Trek', 'Pegasus', 'Bulls']}
                             visibleFrom="xs"
                         />
-                        <Button variant="default" style={{ backgroundColor: '#1c64f2', color: 'white' }}>Login</Button>
-                        <Button style={{ backgroundColor: '#1c64f2', color: 'white' }}>Registreer</Button>
+                        <Button variant="filled" color="#1c64f2" onClick={() => { document.location.href = '/login'; }}>Log in</Button>
+                        <Button  variant="filled" color="#1c64f2" onClick={() => { document.location.href = '/register'; }}>Registreer</Button>
                     </Group>
 
                     <Burger opened={drawerOpened} onClick={toggleDrawer} hiddenFrom="sm" />
@@ -163,8 +163,8 @@ export function NavBar() {
                     <Divider my="sm" />
 
                     <Group justify="center" grow pb="xl" px="md">
-                        <Button style={{ backgroundColor: '#1c64f2', color: 'white' }}>Log in</Button>
-                        <Button style={{ backgroundColor: '#1c64f2', color: 'white' }}>Sign up</Button>
+                        <Button onClick={() => { document.location.href = '/login'; }} variant="filled" mt="md" fullWidth color="#1c64f2">Login</Button>
+                        <Button onClick={() => { document.location.href = '/register'; }} style={{ backgroundColor: '#1c64f2', color: 'white' }}>Sign up</Button>
                     </Group>
                 </ScrollArea>
             </Drawer>
