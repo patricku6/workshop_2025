@@ -1,12 +1,12 @@
-import {Button, Text} from "@mantine/core";
-import Template from "./Template.jsx";
+import Navbar from "./components/Navbar";
+import AdminTemplate from "./components/AdminTemplate.jsx";
 
-export default function Home() {
+export default function Index() {
     return (
         <>
-            <div>
-                <Text align="center">Welkom op het admin dashboard!</Text>
-            </div>
+           <AdminTemplate>
+               hoi
+           </AdminTemplate>
         </>
     );
 }
