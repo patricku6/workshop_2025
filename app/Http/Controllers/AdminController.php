@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
+use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
 
 class AdminController extends Controller
 {
@@ -19,6 +19,19 @@ class AdminController extends Controller
     {
         $users = User::all();
         return Inertia::render('admin/Users', ['users' => $users]);
+    }
+
+    public function products()
+    {
+        $products = Product::all();
+        $categories = Category::all();
+        return Inertia::render('admin/Products', ['products' => $products, 'categories' => $categories]);
+    }
+
+    public function categories()
+    {
+        $categories = Category::all();
+        return Inertia::render('admin/Categories', ['categories' => $categories]);
     }
 
     public function updateUsers(Request $request)

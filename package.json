@@ -17,6 +17,7 @@
     },
     "dependencies": {
         "@coreui/react": "^5.5.0",
+        "@inertiajs/inertia-react": "^0.8.1",
         "@inertiajs/react": "^2.0.3",
         "@mantine/carousel": "^7.16.2",
         "@mantine/charts": "^7.16.2",

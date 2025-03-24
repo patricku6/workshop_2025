@@ -3,7 +3,8 @@ import {
     IconChevronDown,
     IconGenderFemale, IconGenderMale, IconMoodKid,
     IconSearch,
-    IconStar,
+    IconShoppingBag,
+    IconMoon, IconSun,
 } from '@tabler/icons-react';
 import {
     Anchor, Autocomplete,
@@ -46,13 +47,31 @@ const mockdata = [
     }
 ];
 
-export function NavBar() {
+export function NavBar({}) {
     const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] = useDisclosure(false);
     const [linksOpened, { toggle: toggleLinks }] = useDisclosure(false);
     const [loggedIn, setLoggedIn] = useState(false);
     const [initials, setInitials] = useState('');
+    const [opened, { open, close }] = useDisclosure(false);
+    const [admin, setAdmin] = useState(false);
+    let [cartData, setCartData] = useState([]);
 
-    // Fetch logged-in user status
+    const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'dark');
+    const isDarkMode = theme === 'dark';
+
+    const toggleTheme = () => {
+        const newTheme = isDarkMode ? 'light' : 'dark';
+        setTheme(newTheme);
+        localStorage.setItem('theme', newTheme);
+        document.documentElement.setAttribute('data-mantine-color-scheme', newTheme);
+    };
+
+    useEffect(() => {
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        setTheme(savedTheme);
+        document.documentElement.setAttribute('data-mantine-color-scheme', savedTheme);
+    }, []);
+
     const fetchLoggedInUser = async () => {
         const response = await fetch('/isLoggedIn', {
             method: 'GET',
@@ -69,7 +88,22 @@ export function NavBar() {
         return null;
     }
 
-    // Fetch user's initials
+    const fetchAdminStatus = async () => {
+        const response = await fetch('/isAdmin', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (response.ok) {
+            return response.json();
+        }
+
+        return null;
+    }
+
     const fetchInitials = async () => {
         const response = await fetch('/getInitials', {
             method: 'GET',
@@ -86,7 +120,23 @@ export function NavBar() {
         return null
     }
 
-    // Fetch data after component is mounted
+    const fetchCart = async () => {
+        const response = await fetch('/cart/get', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            return Array.isArray(data) ? data : Object.values(data);
+        }
+
+        return [];
+    }
+
     useEffect(() => {
         const fetchData = async () => {
             const userData = await fetchLoggedInUser();
@@ -94,6 +144,12 @@ export function NavBar() {
 
             const initialsData = await fetchInitials();
             setInitials(initialsData?.initials || '');
+
+            const adminData = await fetchAdminStatus();
+            setAdmin(adminData === 1);
+
+            const cartData = await fetchCart();
+            setCartData(cartData);
         };
 
         fetchData();
@@ -189,7 +245,7 @@ export function NavBar() {
 
                     <Group visibleFrom="sm">
                         <Autocomplete
-                            placeholder="Zoek op fiets"
+                            placeholder="Waar zoekt u naar?"
                             leftSection={<IconSearch size={16} stroke={1.5} color="#1c64f2" />}
                             data={['Gazelle', 'Giant', 'Batavus', 'Sparta', 'Trek', 'Pegasus', 'Bulls']}
                             visibleFrom="xs"
@@ -199,6 +255,12 @@ export function NavBar() {
                                 <Button variant="filled" color="#1c64f2" onClick={() => { document.location.href = '/login'; }}>Log in</Button>
                                 <Button variant="filled" color="#1c64f2" onClick={() => { document.location.href = '/register'; }}>Registreer</Button>
                             </>
+                        )}
+                        {isDarkMode ? <IconSun onClick={toggleTheme} size={24} className="hover:text-[#1c64f2] transition-all cursor-pointer" /> :
+                        <IconMoon onClick={toggleTheme} size={24} className="hover:text-[#1c64f2] transition-all cursor-pointer" />
+                        }
+                        {loggedIn && (
+                        <IconShoppingBag onClick={open} size={24} style={{ cursor: 'pointer' }} className="hover:text-[#1c64f2] transition-all" />
                         )}
                         {loggedIn && (
                             <Menu shadow="md" width={200}>
@@ -210,6 +272,7 @@ export function NavBar() {
 
                                 <Menu.Dropdown>
                                     <Menu.Item onClick={() => { document.location.href = '/profile' }}>Profiel</Menu.Item>
+                                    {admin && <Menu.Item onClick={() => { document.location.href = '/admin/dashboard' }}>Admin Dashboard</Menu.Item>}
                                     <Menu.Divider />
                                     <Menu.Item onClick={logout}>Uitloggen</Menu.Item>
                                 </Menu.Dropdown>
@@ -221,6 +284,30 @@ export function NavBar() {
                 </Group>
             </header>
 
+            {loggedIn && (
+            <Drawer opened={opened} onClose={close} title="Winkelwagen" position="right">
+                <ScrollArea h="calc(100vh - 80px)" mx="-md">
+                    <SimpleGrid cols={1} spacing="md">
+                        {cartData.map((item) => (
+                            <Group key={item.id} justify="space-between" align="center">
+                                <Group align="center">
+                                    <Image src={item.image} alt={item.name} width={50} height={50} />
+                                    <Text>{item.name}</Text>
+                                </Group>
+                                <Text>{item.quantity}x</Text>
+                                <Text>${item.price.toFixed(2)}</Text>
+                            </Group>
+                        ))}
+                    </SimpleGrid>
+                    <Divider my="md" />
+                    <Group justify="space-between">
+                        <Text>Totaal</Text>
+                        <Text>${cartData.reduce((acc, item) => acc + item.price * item.quantity, 0).toFixed(2)}</Text>
+                    </Group>
+                    <Button variant="filled" color="#1c64f2" fullWidth mt="md">Afrekenen</Button>
+                </ScrollArea>
+            </Drawer>
+            )}
             <Drawer
                 opened={drawerOpened}
                 onClose={closeDrawer}

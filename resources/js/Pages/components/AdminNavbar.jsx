@@ -1,34 +1,30 @@
-import { useState } from 'react';
 import {
-    Icon2fa,
-    IconBellRinging,
     IconDatabaseImport,
-    IconFingerprint,
-    IconKey,
+    IconUser,
     IconLogout,
 } from '@tabler/icons-react';
-import {Code, Group, Image} from '@mantine/core';
+import { Group, Image } from '@mantine/core';
 import classes from './AdminNavbar.module.css';
 import Logo from "../../../../public/images/logo.png";
-import {router} from "@inertiajs/react";
+import { router } from "@inertiajs/react";
 
 const data = [
-    { label: 'Users', link: '/admin/users', icon: IconFingerprint },
-    { label: 'Products', link: '/admin/products', icon: IconDatabaseImport },
+    { label: 'Gebruikers', link: '/admin/users', icon: IconUser },
+    { label: 'Producten', link: '/admin/products', icon: IconDatabaseImport },
+    { label: 'Categorieën', link: '/admin/categories', icon: IconDatabaseImport },
 ];
 
 export default function AdminDashboard() {
-    const [active, setActive] = useState('Billing');
+    const currentPath = window.location.pathname;
 
     const links = data.map((item) => (
         <a
             className={classes.link}
-            data-active={item.label === active || undefined}
+            data-active={currentPath === item.link || undefined}
             href={item.link}
             key={item.label}
             onClick={(event) => {
                 event.preventDefault();
-                setActive(item.label);
                 document.location.href = item.link;
             }}
         >
@@ -40,8 +36,13 @@ export default function AdminDashboard() {
     return (
         <nav className={classes.navbar}>
             <div className={classes.navbarMain}>
+                <Group justify="center">
+                    <Image src={Logo} alt="OJFP Logo" className="w-10 h-10 cursor-pointer" onClick={() => {
+                        document.location.href = '/';
+                    }} />
+                </Group>
                 <Group className={classes.header} justify="center">
-                    <Image src={Logo} alt="OJFP Logo" className="w-10 h-10 cursor-pointer" onClick={() => { document.location.href = '/'; }} />
+                    <span className="mt-2 font-bold">Admin Dashboard</span>
                 </Group>
                 {links}
             </div>

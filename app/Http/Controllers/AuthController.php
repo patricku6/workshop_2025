@@ -83,5 +83,10 @@ class AuthController extends Controller
         $initials = $name[0] . $name[1];
         return response()->json(['initials' => $initials]);
     }
+
+    public function isAdmin()
+    {
+        return auth()->user()->is_admin;
+    }
 }
 

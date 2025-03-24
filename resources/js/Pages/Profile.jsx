@@ -9,6 +9,7 @@ export default function Profile({ user }) {
     const emailIcon = <IconMail size={18} stroke={1.5} />;
     const lockIcon = <IconLock size={18} stroke={1.5} />;
     const userIcon = <IconUser size={18} stroke={1.5} />;
+    const [loading, setLoading] = useState(false);
 
     const [data, setData] = useState({
         name: user.name || "",
@@ -31,12 +32,15 @@ export default function Profile({ user }) {
         }
 
         router.post("/profile-update", data, {
+            setLoading: setLoading(true),
             onError: (errors) => {
+                setLoading(false);
                 Object.values(errors).forEach((error) => {
                     toast.error(error);
                 });
             },
             onSuccess: () => {
+                setLoading(false);
                 toast.success("Profiel succesvol bijgewerkt.");
             }
         });
@@ -93,7 +97,7 @@ export default function Profile({ user }) {
                             onChange={(e) => setData({ ...data, confirmNewPassword: e.target.value })}
                         />
 
-                        <Button className="mt-4" type="submit" fullWidth>
+                        <Button loading={loading} className="mt-4" type="submit" fullWidth>
                             Save Changes
                         </Button>
                     </form>

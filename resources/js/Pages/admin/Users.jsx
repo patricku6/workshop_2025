@@ -61,12 +61,12 @@ export default function Users({ users, setUsers }) {
     return (
         <>
             {/* Modal for Editing User */}
-            <Modal opened={opened} onClose={close} title={<Title order={2} className="text-indigo-600">Edit User</Title>} centered size="sm" padding="lg" radius="lg">
+            <Modal opened={opened} onClose={close} title={<Title order={2} className="text-indigo-600">Bewerk gebruiker</Title>} centered size="sm" padding="lg" radius="lg">
                 <div className="p-4">
                     <Divider my="sm" />
                     <div className="flex flex-col gap-4">
                         <TextInput
-                            label="Name"
+                            label="Naam"
                             placeholder="John Doe"
                             value={user.name}
                             size="sm"
@@ -90,22 +90,22 @@ export default function Users({ users, setUsers }) {
                         />
                         <Divider my="sm" />
                         <div className="flex justify-between mt-4">
-                            <Button onClick={close} color="gray" size="sm" radius="md" variant="outline">Cancel</Button>
-                            <Button color="blue" size="sm" radius="md" onClick={saveUser}>Save Changes</Button>
+                            <Button onClick={close} color="gray" size="sm" radius="md" variant="outline">Terug</Button>
+                            <Button color="blue" size="sm" radius="md" onClick={saveUser}>Opslaan</Button>
                         </div>
                     </div>
                 </div>
             </Modal>
 
             {/* Modal for Delete Confirmation */}
-            <Modal opened={deleteModalOpened} onClose={closeDeleteModal} title={<Title order={2} className="text-red-600">Delete User</Title>} centered size="sm" padding="lg" radius="lg">
+            <Modal opened={deleteModalOpened} onClose={closeDeleteModal} title={<Title order={2} className="text-red-600">Verwijder Gebruiker</Title>} centered size="sm" padding="lg" radius="lg">
                 <div className="p-4">
                     <Divider my="sm" />
-                    <p>Are you sure you want to delete {userToDelete ? userToDelete.name : 'this user'}?</p>
+                    <p>Weet je zeker dat je <span className="font-bold">{userToDelete ? userToDelete.name : 'this user'}</span>  wilt verwijderen?</p>
                     <Divider my="sm" />
                     <div className="flex justify-between mt-4">
-                        <Button onClick={closeDeleteModal} color="gray" size="sm" radius="md" variant="outline">Cancel</Button>
-                        <Button color="red" size="sm" radius="md" onClick={deleteUser}>Delete User</Button>
+                        <Button onClick={closeDeleteModal} color="gray" size="sm" radius="md" variant="outline">Terug</Button>
+                        <Button color="red" size="sm" radius="md" onClick={deleteUser}>Verwijder</Button>
                     </div>
                 </div>
             </Modal>
@@ -113,17 +113,17 @@ export default function Users({ users, setUsers }) {
             <AdminTemplate>
                 <div className="p-6">
                     <Title order={1} className="text-indigo-600 mb-6">
-                        Users
+                        Gebruikers
                     </Title>
                     <Card shadow="sm" padding="lg" radius="md" withBorder className="mt-4">
                         <Table striped highlightOnHover>
                             <thead className="bg-indigo-100">
                             <tr>
                                 <th className="p-3 text-left">ID</th>
-                                <th className="p-3 text-left">Name</th>
+                                <th className="p-3 text-left">Naam</th>
                                 <th className="p-3 text-left">Email</th>
                                 <th className="p-3 text-left">Admin</th>
-                                <th className="p-3 text-left">Actions</th>
+                                <th className="p-3 text-left">Acties</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -134,9 +134,9 @@ export default function Users({ users, setUsers }) {
                                     <td className="p-3">{user.email}</td>
                                     <td className="p-3">
                                         {user.is_admin ? (
-                                            <Badge color="green">Yes</Badge>
+                                            <Badge color="green">Ja</Badge>
                                         ) : (
-                                            <Badge color="red">No</Badge>
+                                            <Badge color="red">Nee</Badge>
                                         )}
                                     </td>
                                     <td className="p-3">
@@ -148,10 +148,10 @@ export default function Users({ users, setUsers }) {
                                             </Menu.Target>
                                             <Menu.Dropdown>
                                                 <Menu.Item icon={<IconEdit size={14} />} onClick={() => editUser(user.id)}>
-                                                    Edit
+                                                    Bewerk
                                                 </Menu.Item>
                                                 <Menu.Item icon={<IconTrash size={14} />} color="red" onClick={() => handleDeleteClick(user.id)}>
-                                                    Delete
+                                                    Verwijder
                                                 </Menu.Item>
                                             </Menu.Dropdown>
                                         </Menu>
