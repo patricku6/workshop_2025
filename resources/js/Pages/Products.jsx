@@ -114,7 +114,7 @@ export default function ProductPage({ products, categories, search = null, categ
                                 <Card shadow="sm" padding="lg" radius="md" withBorder className="hover:scale-105 transition-all">
                                     <Card.Section>
                                         <img
-                                            src={sortedProducts.image ? `/${sortedProducts.image}` : noImage}
+                                            src={product.image ? `/${product.image}` : noImage}
                                             alt={product.name}
                                             onError={(e) => {
                                                 e.target.onerror = null;

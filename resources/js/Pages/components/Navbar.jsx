@@ -331,7 +331,7 @@ export function NavBar({}) {
                             <Group key={item.id} justify="space-between" align="center" className="p-4 rounded-md">
                                 <Group align="center">
                                     <Image
-                                        src={item.image}
+                                        src={item.image ? `/${item.image}` : noImage}
                                         alt={item.name}
                                         width={20}
                                         height={20}
@@ -343,7 +343,7 @@ export function NavBar({}) {
                                     <Text>{item.name}</Text>
                                 </Group>
                                 <Text>{item.quantity}x</Text>
-                                <Text>€{item.price.toFixed(2)}</Text>
+                                <Text>${Number(item.price).toFixed(2)} {/* FIXED */}</Text>
                             </Group>
                         ))}
                     </SimpleGrid>

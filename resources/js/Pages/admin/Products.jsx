@@ -17,7 +17,7 @@ import AdminTemplate from "../components/AdminTemplate.jsx";
 import { useState } from "react";
 import { useDisclosure } from "@mantine/hooks";
 import { router } from "@inertiajs/react";
-import {toast, ToastContainer} from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import noImage from "../../../../public/images/noImage.png";
 
 export default function Products({ products, categories }) {
@@ -33,13 +33,17 @@ export default function Products({ products, categories }) {
     });
     const [productToDelete, setProductToDelete] = useState(null);
     const [editing, setEditing] = useState(false);
-    console.log(products)
 
     const editProduct = (id) => {
         const selectedProduct = products.find(product => product.id === id);
         if (selectedProduct) {
             setEditing(true);
-            setProduct(selectedProduct);
+            setProduct({
+                ...selectedProduct,
+                price: Number(selectedProduct.price),        // FIXED
+                stock: Number(selectedProduct.stock),        // FIXED
+                category_id: Number(selectedProduct.category_id), // FIXED
+            });
             open();
         }
     };
@@ -49,9 +53,9 @@ export default function Products({ products, categories }) {
         formData.append("id", product.id || "");
         formData.append("name", product.name);
         formData.append("description", product.description);
-        formData.append("price", product.price);
-        formData.append("stock", product.stock);
-        formData.append("category_id", product.category_id);
+        formData.append("price", Number(product.price));          // FIXED
+        formData.append("stock", Number(product.stock));          // FIXED
+        formData.append("category_id", Number(product.category_id)); // FIXED
 
         if (product.image instanceof File) {
             formData.append("image", product.image);
@@ -63,9 +67,7 @@ export default function Products({ products, categories }) {
                     headers: {
                         "Content-Type": "multipart/form-data",
                     },
-                    onError: (error) => {
-                        toast.error(error.message);
-                    }
+                    onError: (error) => toast.error(error.message),
                 });
                 setEditing(false);
             } else {
@@ -73,18 +75,14 @@ export default function Products({ products, categories }) {
                     headers: {
                         "Content-Type": "multipart/form-data",
                     },
-                    onError: (error) => {
-                        toast.error(error.message);
-                    }
+                    onError: (error) => toast.error(error.message),
                 });
-                setEditing(false);
             }
             close();
         } catch (error) {
             console.error("Error uploading product:", error);
         }
     };
-
 
     const handleDeleteClick = (id) => {
         const selectedProduct = products.find(product => product.id === id);
@@ -105,13 +103,17 @@ export default function Products({ products, categories }) {
         <AdminTemplate>
             <div className="p-6">
                 <Title order={1} className="text-indigo-600 mb-6">Producten</Title>
-                <Button leftSection={<IconPlus />} color="green" onClick={() => { setProduct({ id: null, name: "", price: 0, stock: 0, image: "" }); open(); }}>Voeg product toe</Button>
+                <Button leftSection={<IconPlus />} color="green" onClick={() => {
+                    setProduct({ id: null, name: "", price: 0, stock: 0, image: "", description: "", category_id: 0 });
+                    open();
+                }}>
+                    Voeg product toe
+                </Button>
                 <SimpleGrid cols={3} spacing="lg" className="mt-4">
                     {products.map((product) => (
                         <Card shadow="sm" padding="lg" radius="md" withBorder key={product.id}>
-                            <p>{product.image}</p>
                             <img
-                                src={product.image ? `/${product.image}` : noImage} // Ensure there's a leading slash
+                                src={product.image ? `/${product.image}` : noImage}
                                 alt={product.name}
                                 onError={(e) => {
                                     e.target.onerror = null;
@@ -127,18 +129,23 @@ export default function Products({ products, categories }) {
                             />
                             <Title order={4} className="mt-4">{product.name}</Title>
                             <p className="text-gray-600">{product.description}</p>
-                            <p className="text-indigo-600 font-bold mt-2">${product.price.toFixed(2)}</p>
+                            <p className="text-indigo-600 font-bold mt-2">
+                                ${Number(product.price).toFixed(2)} {/* FIXED */}
+                            </p>
                             <p className="text-gray-500">Voorraad: {product.stock}</p>
-                            <p className="text-gray-500">Categorie: {categories.find(category => category.id === product.category_id)?.name ?? 'Geen'}</p>
+                            <p className="text-gray-500">
+                                Categorie: {categories.find(category => category.id === product.category_id)?.name ?? 'Geen'}
+                            </p>
                             <div className="flex justify-between mt-4">
-                                <Button size="xs" color="blue" leftIcon={<IconEdit size={14} />} onClick={() => editProduct(product.id)}>Bewerk</Button>
-                                <Button size="xs" color="red" leftIcon={<IconTrash size={14} />} onClick={() => handleDeleteClick(product.id)}>Verwijder</Button>
+                                <Button size="xs" color="blue" leftSection={<IconEdit size={14} />} onClick={() => editProduct(product.id)}>Bewerk</Button>
+                                <Button size="xs" color="red" leftSection={<IconTrash size={14} />} onClick={() => handleDeleteClick(product.id)}>Verwijder</Button>
                             </div>
                         </Card>
                     ))}
                 </SimpleGrid>
             </div>
 
+            {/* Modal voor toevoegen/bewerken */}
             <Modal opened={opened} onClose={close} title={<Title order={2} className="text-indigo-600">{product.id ? "Bewerk product" : "Voeg product toe"}</Title>} centered size="sm" padding="lg" radius="lg">
                 <div className="p-4">
                     <Divider my="sm" />
@@ -146,7 +153,7 @@ export default function Products({ products, categories }) {
                     <FileInput
                         label="Afbeelding"
                         accept="image/*"
-                        onChange={(file) => setProduct({ ...product, image: file })} // Store actual file
+                        onChange={(file) => setProduct({ ...product, image: file })}
                         leftSection={<IconUpload size={20} />}
                     />
                     <Textarea label="Beschrijving" placeholder="Product beschrijving" value={product.description} onChange={(e) => setProduct({ ...product, description: e.target.value })} />
@@ -167,6 +174,7 @@ export default function Products({ products, categories }) {
                 </div>
             </Modal>
 
+            {/* Delete modal */}
             <Modal opened={deleteModalOpened} onClose={closeDeleteModal} title={<Title order={2} className="text-red-600">Verwijder Product</Title>} centered size="sm" padding="lg" radius="lg">
                 <div className="p-4">
                     <Divider my="sm" />
@@ -178,6 +186,7 @@ export default function Products({ products, categories }) {
                     </div>
                 </div>
             </Modal>
+
             <ToastContainer />
         </AdminTemplate>
     );
