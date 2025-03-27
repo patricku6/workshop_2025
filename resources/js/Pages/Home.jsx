@@ -13,7 +13,7 @@ export default function Home() {
             <Template />
             <Container size="lg" py="xl" className="select-none">
                 {/* Hero Section */}
-                <Title align="center" my="lg" color="#1c64f2">Welkom bij OFJP</Title>
+                <Title align="center" my="lg" color="#1c64f2">Welkom bij <span className="text-[#1c64f2]">OFJP</span>!</Title>
                 <Text align="center" size="lg" color="dimmed">De beste fietsen voor elk avontuur</Text>
 
                 {/* Carousel Slider */}
@@ -101,4 +101,4 @@ export default function Home() {
         </>
     );
 }
-    
+

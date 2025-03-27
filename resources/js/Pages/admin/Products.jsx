@@ -10,6 +10,7 @@ import {
     Textarea,
     SimpleGrid,
     Select,
+    Image,
 } from "@mantine/core";
 import { IconEdit, IconTrash, IconPlus, IconUpload } from "@tabler/icons-react";
 import AdminTemplate from "../components/AdminTemplate.jsx";
@@ -17,6 +18,7 @@ import { useState } from "react";
 import { useDisclosure } from "@mantine/hooks";
 import { router } from "@inertiajs/react";
 import {toast, ToastContainer} from "react-toastify";
+import noImage from "../../../../public/images/noImage.png";
 
 export default function Products({ products, categories }) {
     const [opened, { open, close }] = useDisclosure(false);
@@ -31,6 +33,7 @@ export default function Products({ products, categories }) {
     });
     const [productToDelete, setProductToDelete] = useState(null);
     const [editing, setEditing] = useState(false);
+    console.log(products)
 
     const editProduct = (id) => {
         const selectedProduct = products.find(product => product.id === id);
@@ -106,8 +109,22 @@ export default function Products({ products, categories }) {
                 <SimpleGrid cols={3} spacing="lg" className="mt-4">
                     {products.map((product) => (
                         <Card shadow="sm" padding="lg" radius="md" withBorder key={product.id}>
-                            <img src={'/' + product.image} alt={product.name}
-                                 className="h-32 w-full object-cover rounded-lg"/>
+                            <p>{product.image}</p>
+                            <img
+                                src={product.image ? `/${product.image}` : noImage} // Ensure there's a leading slash
+                                alt={product.name}
+                                onError={(e) => {
+                                    e.target.onerror = null;
+                                    e.target.src = noImage;
+                                }}
+                                style={{
+                                    objectFit: 'cover',
+                                    width: '100%',
+                                    height: '200px',
+                                    display: 'block',
+                                    margin: 'auto',
+                                }}
+                            />
                             <Title order={4} className="mt-4">{product.name}</Title>
                             <p className="text-gray-600">{product.description}</p>
                             <p className="text-indigo-600 font-bold mt-2">${product.price.toFixed(2)}</p>

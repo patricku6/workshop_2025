@@ -117,7 +117,7 @@ export default function Users({ users, setUsers }) {
                     </Title>
                     <Card shadow="sm" padding="lg" radius="md" withBorder className="mt-4">
                         <Table striped highlightOnHover>
-                            <thead className="bg-indigo-100">
+                            <thead className="bg-indigo-100 dark:bg-indigo-600">
                             <tr>
                                 <th className="p-3 text-left">ID</th>
                                 <th className="p-3 text-left">Naam</th>
@@ -128,7 +128,7 @@ export default function Users({ users, setUsers }) {
                             </thead>
                             <tbody>
                             {users.map((user) => (
-                                <tr key={user.id} className="hover:bg-indigo-50">
+                                <tr key={user.id} className="hover:bg-indigo-50 dark:hover:bg-indigo-700">
                                     <td className="p-3">{user.id}</td>
                                     <td className="p-3">{user.name}</td>
                                     <td className="p-3">{user.email}</td>

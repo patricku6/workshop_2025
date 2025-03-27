@@ -28,6 +28,8 @@ import {
 import Logo from '../../../../public/images/logo.png';
 import classes from './NavBar.module.css';
 import {useDisclosure} from "@mantine/hooks";
+import noImage from "../../../../public/images/noImage.png";
+import {router} from "@inertiajs/react";
 
 const mockdata = [
     {
@@ -55,6 +57,7 @@ export function NavBar({}) {
     const [opened, { open, close }] = useDisclosure(false);
     const [admin, setAdmin] = useState(false);
     let [cartData, setCartData] = useState([]);
+    const [categories, setCategories] = useState([]);
 
     const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'dark');
     const isDarkMode = theme === 'dark';
@@ -137,6 +140,22 @@ export function NavBar({}) {
         return [];
     }
 
+    const fetchCategories = async () => {
+        const response = await fetch('/categories', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (response.ok) {
+            return response.json();
+        }
+
+        return [];
+    }
+
     useEffect(() => {
         const fetchData = async () => {
             const userData = await fetchLoggedInUser();
@@ -150,6 +169,9 @@ export function NavBar({}) {
 
             const cartData = await fetchCart();
             setCartData(cartData);
+
+            const categories = await fetchCategories();
+            setCategories(categories);
         };
 
         fetchData();
@@ -169,9 +191,18 @@ export function NavBar({}) {
         }
     }
 
+    const search = (term) => {
+        router.get(`/products/${term}`);
+    }
+
+    const category = (category) => {
+        router.get(`/products/category/${category}`);
+    }
+
     const links = mockdata.map((item) => (
-        <UnstyledButton className={classes.subLink} key={item.title}>
-            <Group wrap="nowrap" align="flex-start" className="hover:bg-gray-100 p-2 rounded-md">
+        <Text key={item.title} onClick={() => category(item.title)}>
+        <UnstyledButton className={classes.subLink} key={item.title} href="#">
+            <Group wrap="nowrap" align="flex-start" className="hover:bg-gray-100 dark:hover:bg-gray-600 p-2 rounded-md">
                 <ThemeIcon size={34} variant="default" radius="md">
                     <item.icon size={22} color="#1c64f2" />
                 </ThemeIcon>
@@ -185,6 +216,7 @@ export function NavBar({}) {
                 </div>
             </Group>
         </UnstyledButton>
+        </Text>
     ));
 
     return (
@@ -199,23 +231,23 @@ export function NavBar({}) {
                         </a>
                         <HoverCard width={600} position="bottom" radius="md" shadow="md" withinPortal>
                             <HoverCard.Target>
-                                <a href="#" className={classes.link}>
+                                <a href="/products" className={classes.link}>
                                     <Center inline>
                                         <Box component="span" mr={5}>
-                                            Categorieën
+                                            Fietsen
                                         </Box>
                                         <IconChevronDown size={16} color="#1c64f2"/>
                                     </Center>
                                 </a>
                             </HoverCard.Target>
-                            <a href="#" className={classes.link}>
+                            <a href="/about-us" className={classes.link}>
                                 Over ons
                             </a>
                             <HoverCard.Dropdown style={{overflow: 'hidden'}}>
                                 <Group justify="space-between" px="md">
-                                    <Text fw={500}>Categorieën</Text>
-                                    <Anchor href="#" fz="xs" color="#1c64f2">
-                                        Bekijk alle categorieën
+                                    <Text fw={500}>Fietsen per categorie</Text>
+                                    <Anchor href="/products" fz="xs" color="#1c64f2">
+                                        Bekijk alle fietsen
                                     </Anchor>
                                 </Group>
 
@@ -225,6 +257,7 @@ export function NavBar({}) {
                                     {links}
                                 </SimpleGrid>
 
+                                {!loggedIn && (
                                 <div className={classes.dropdownFooter}>
                                     <Group justify="space-between">
                                         <div>
@@ -232,13 +265,14 @@ export function NavBar({}) {
                                                 Login of registreer om te bestellen
                                             </Text>
                                             <Text size="xs" c="dimmed">
-                                                Registreer nu en ontvang 10% korting op je eerste bestelling
+                                                Registreer nu en ontvang 10% korting op je eerste bestelling!
                                             </Text>
                                         </div>
-                                        <Button variant="default" style={{ backgroundColor: '#1c64f2', color: 'white' }}>Login</Button>
-                                        <Button style={{ backgroundColor: '#1c64f2', color: 'white' }}>Registreer</Button>
+                                            <Button variant="default" style={{ backgroundColor: '#1c64f2', color: 'white' }}>Login</Button>
+                                            <Button style={{ backgroundColor: '#1c64f2', color: 'white' }}>Registreer</Button>
                                     </Group>
                                 </div>
+                                )}
                             </HoverCard.Dropdown>
                         </HoverCard>
                     </Group>
@@ -249,6 +283,11 @@ export function NavBar({}) {
                             leftSection={<IconSearch size={16} stroke={1.5} color="#1c64f2" />}
                             data={['Gazelle', 'Giant', 'Batavus', 'Sparta', 'Trek', 'Pegasus', 'Bulls']}
                             visibleFrom="xs"
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter' && e.target.value.trim() !== '') {
+                                    search(e.target.value);
+                                }
+                            }}
                         />
                         {!loggedIn && (
                             <>
@@ -289,22 +328,31 @@ export function NavBar({}) {
                 <ScrollArea h="calc(100vh - 80px)" mx="-md">
                     <SimpleGrid cols={1} spacing="md">
                         {cartData.map((item) => (
-                            <Group key={item.id} justify="space-between" align="center">
+                            <Group key={item.id} justify="space-between" align="center" className="p-4 rounded-md">
                                 <Group align="center">
-                                    <Image src={item.image} alt={item.name} width={50} height={50} />
+                                    <Image
+                                        src={item.image}
+                                        alt={item.name}
+                                        width={20}
+                                        height={20}
+                                        onError={(e) => {
+                                            e.target.onerror = null;
+                                            e.target.src = noImage;
+                                        }}
+                                    />
                                     <Text>{item.name}</Text>
                                 </Group>
                                 <Text>{item.quantity}x</Text>
-                                <Text>${item.price.toFixed(2)}</Text>
+                                <Text>€{item.price.toFixed(2)}</Text>
                             </Group>
                         ))}
                     </SimpleGrid>
                     <Divider my="md" />
-                    <Group justify="space-between">
+                    <Group justify="space-between" className="sticky bottom-0 bg-white dark:bg-gray-800 p-4 rounded-t-md">
                         <Text>Totaal</Text>
-                        <Text>${cartData.reduce((acc, item) => acc + item.price * item.quantity, 0).toFixed(2)}</Text>
+                        <Text>€{cartData.reduce((acc, item) => acc + item.price * item.quantity, 0).toFixed(2)}</Text>
+                        <Button variant="filled" color="#1c64f2" fullWidth mt="md">Afrekenen</Button>
                     </Group>
-                    <Button variant="filled" color="#1c64f2" fullWidth mt="md">Afrekenen</Button>
                 </ScrollArea>
             </Drawer>
             )}

@@ -2,11 +2,13 @@ import { Container, Title, Text, Button, Grid, Card, Image, TextInput, Select } 
 import Template from './Template.jsx';
 import { IconSearch } from '@tabler/icons-react';
 import { useState } from 'react';
+import noImage from '../../../public/images/noImage.png';
+import {router} from "@inertiajs/react";
 
-export default function ProductPage({ products, categories }) {
-    console.log(categories);
+export default function ProductPage({ products, categories, search = null, category = null }) {
     const [searchTerm, setSearchTerm] = useState('');
 
+    const [title, setTitle] = useState(search !== null ? "Resultaten voor '" + search + "'" : (category !== null ? category || "Onze Fietsen" : "Onze Fietsen"));
     const [sortOption, setSortOption] = useState(null);
 
     const filteredProducts = products.filter((product) => {
@@ -38,13 +40,22 @@ export default function ProductPage({ products, categories }) {
         setSortOption(value);
     };
 
+    const handleProductClick = (id) => {
+        router.visit(`/product/${id}`);
+    }
+
+    const handleCategoryChange = (value) => {
+        setSortOption(value);
+        setTitle(categories.find((category) => category.id === Number(value))?.name || "Onze Fietsen");
+    }
+
     return (
         <>
             <Template />
             <Container size="lg" py="xl" className="select-none">
                 {/* Product Page Header */}
                 <Title align="center" my="lg" color="#1c64f2">
-                    Onze Producten
+                    {title}
                 </Title>
                 <Text align="center" size="lg" color="dimmed">
                     Bekijk ons assortiment van hoogwaardige fietsen
@@ -78,8 +89,8 @@ export default function ProductPage({ products, categories }) {
                     <Grid.Col span={12} sm={12}>
                         <Select
                             placeholder="Categorie"
-                            value={String(sortOption)} // Ensure that value is a string
-                            onChange={(value) => handleSortChange(value)}
+                            value={String(sortOption)}
+                            onChange={(value) => handleCategoryChange(value)}
                             data={categories.map((category) => ({
                                 value: String(category.id),
                                 label: category.name,
@@ -102,9 +113,13 @@ export default function ProductPage({ products, categories }) {
                             <Grid.Col span={4} sm={6} md={4} lg={3} key={product.id}>
                                 <Card shadow="sm" padding="lg" radius="md" withBorder className="hover:scale-105 transition-all">
                                     <Card.Section>
-                                        <Image
-                                            src={product.image}
+                                        <img
+                                            src={sortedProducts.image ? `/${sortedProducts.image}` : noImage}
                                             alt={product.name}
+                                            onError={(e) => {
+                                                e.target.onerror = null;
+                                                e.target.src = noImage;
+                                            }}
                                             style={{
                                                 objectFit: 'cover',
                                                 width: '100%',
@@ -116,8 +131,11 @@ export default function ProductPage({ products, categories }) {
                                     </Card.Section>
                                     <Text weight={500} mt="md" size="lg">{product.name}</Text>
                                     <Text size="sm" color="dimmed">{product.description}</Text>
+                                    <Text size="sm" color="dimmed"
+                                          mt="sm">Categorie: {categories.find((category) => category.id === product.category_id)?.name || 'Geen'}</Text>
                                     <Text weight={500} mt="md" color="green">{product.price}</Text>
-                                    <Button variant="filled" mt="md" fullWidth color="#1c64f2">
+                                    <Button variant="filled" mt="md" fullWidth color="#1c64f2"
+                                            onClick={() => handleProductClick(product.id)}>
                                         Bekijk
                                     </Button>
                                 </Card>

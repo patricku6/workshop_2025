@@ -21,10 +21,18 @@ Route::get('/register', function () {
     return Inertia::render('Register');
 })->name('register');
 
+Route::get('/about-us', function () {
+    return Inertia::render('AboutUs');
+})->name('about-us');
+
 Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index')->middleware('auth');
 
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+Route::get('/products/{search}', [ProductController::class, 'search'])->name('products.search');
+Route::get('/products/category/{category}', [ProductController::class, 'indexByCategory'])->name('products.category');
 Route::get('/product/{id}', [ProductController::class, 'show'])->name('products.show');
+
+Route::get('/categories', [CategoryController::class, 'fetchCategories'])->name('admin.categories');
 
 Route::post('cart/add', [ProductController::class, 'addToCart'])->name('cart.add');
 Route::get('cart/get', [ProductController::class, 'getCart'])->name('cart.get');

@@ -69,7 +69,7 @@ export default function Categories({ categories, setCategories }) {
                     </div>
                     <Card shadow="sm" padding="lg" radius="md" withBorder className="mt-4">
                         <Table striped highlightOnHover>
-                            <thead className="bg-indigo-100">
+                            <thead className="bg-indigo-100 dark:bg-indigo-600">
                             <tr>
                                 <th className="p-3 text-left">ID</th>
                                 <th className="p-3 text-left">Naam</th>
@@ -78,7 +78,7 @@ export default function Categories({ categories, setCategories }) {
                             </thead>
                             <tbody>
                             {categories.map((category) => (
-                                <tr key={category.id} className="hover:bg-indigo-50">
+                                <tr key={category.id} className="hover:bg-indigo-50 dark:hover:bg-indigo-700">
                                     <td className="p-3">{category.id}</td>
                                     <td className="p-3">{category.name}</td>
                                     <td className="p-3">

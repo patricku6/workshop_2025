@@ -1,12 +1,17 @@
 import { Container, Title, Text, Button, Grid, Card, Image, TextInput, Select, Group } from '@mantine/core';
 import Template from './Template.jsx';
-import { IconSearch, IconArrowBack } from '@tabler/icons-react';
+import { IconArrowBack } from '@tabler/icons-react';
 import {router} from "@inertiajs/react";
+import {toast} from "react-toastify";
 
 export default function ProductDetailPage({ product }) {
 
     const addToCart = () => {
-        router.post(`/cart/add`, { product_id: product.id });
+        router.post(`/cart/add`, { product_id: product.id }, {
+            onSuccess: () => {
+            toast.success('Product toegevoegd aan winkelwagen');
+            }
+        });
     }
 
     return (

@@ -9,6 +9,16 @@ use Illuminate\Support\Facades\DB;
 
 class CategoryController extends Controller
 {
+
+    public function fetchCategories()
+    {
+        $categories = Category::all();
+
+        return view('admin.categories', [
+            'categories' => $categories,
+        ]);
+    }
+
     public function createCategory(Request $request): RedirectResponse
     {
         $category = Category::create([

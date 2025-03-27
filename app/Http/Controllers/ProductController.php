@@ -19,6 +19,25 @@ class ProductController extends Controller
         ]);
     }
 
+    public function search($search)
+    {
+        return Inertia::render('Products', [
+            'products' => Product::where('name', 'like', '%' . $search . '%')->get(),
+            'categories' => Category::all(),
+            'search' => $search
+        ]);
+    }
+
+    public function indexByCategory($category)
+    {
+        $categoryId = Category::where('name', $category)->first()->id;
+        return Inertia::render('Products', [
+            'products' => Product::where('category_id', $categoryId)->get(),
+            'categories' => Category::all(),
+            'category' => $category
+        ]);
+    }
+
     public function show($id)
     {
         return Inertia::render('Product', [
@@ -31,10 +50,10 @@ class ProductController extends Controller
         $product = Product::find($request->product_id);
         $cart = session()->get('cart', []);
 
-        if (isset($cart[$request->id])) {
-            $cart[$request->id]['quantity']++;
+        if (isset($cart[$request->product_id])) {
+            $cart[$request->product_id]['quantity']++;
         } else {
-            $cart[$request->id] = [
+            $cart[$request->product_id] = [
                 'name' => $product->name,
                 'quantity' => 1,
                 'price' => $product->price,
@@ -68,8 +87,8 @@ class ProductController extends Controller
         }
 
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('public/products');
-            $imageUrl = str_replace('public/', 'storage/', $imagePath);
+            $imagePath = $request->file('image')->store('products', 'public');
+            $imageUrl = 'storage/' . $imagePath;
         } else {
             return response()->json(['error' => 'Afbeelding niet geüpload'], 400);
         }
