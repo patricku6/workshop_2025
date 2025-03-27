@@ -3,6 +3,7 @@ import Template from './Template.jsx';
 import { IconArrowBack } from '@tabler/icons-react';
 import {router} from "@inertiajs/react";
 import {toast} from "react-toastify";
+import noImage from "../../../public/images/noImage.png";
 
 export default function ProductDetailPage({ product }) {
 
@@ -39,7 +40,7 @@ export default function ProductDetailPage({ product }) {
                         <Card shadow="sm" radius="md" withBorder>
                             <Card.Section>
                                 <Image
-                                    src={product.image}
+                                    src={product.image ? `/${product.image}` : noImage}
                                     alt={product.name}
                                     style={{
                                         objectFit: 'cover',
