@@ -1,10 +1,11 @@
-import { Container, Title, Text, Button, Grid, Card, Image, TextInput, Select } from '@mantine/core';
+import { Container, Title, Text, Button, Grid, Card, Image, TextInput, Select, Group, Badge } from '@mantine/core';
 import Template from './Template.jsx';
 import { IconSearch, IconChevronDown } from '@tabler/icons-react';
 import { useState } from 'react';
 import noImage from '../../../public/images/noImage.png';
 import {router} from "@inertiajs/react";
 import {toast, ToastContainer} from "react-toastify";
+import classes from '../../css/FeatureCard.module.css';
 
 export default function ProductPage({ products, categories, search = null, category = null }) {
     const [searchTerm, setSearchTerm] = useState('');
@@ -127,13 +128,20 @@ export default function ProductPage({ products, categories, search = null, categ
                     </Grid.Col>
                 </Grid>
 
-                {/* Product List */}
                 <Grid mt="md" gutter="lg">
                     {sortedProducts.length > 0 ? (
                         sortedProducts.map((product) => (
                             <Grid.Col span={4} sm={6} md={4} lg={3} key={product.id}>
-                                <Card shadow="sm" padding="lg" radius="md" withBorder className="hover:scale-105 transition-all">
-                                    <Card.Section>
+                                <Card
+                                    withBorder
+                                    radius="md"
+                                    className={classes.card}
+                                    style={{
+                                        opacity: product.stock === 0 ? 0.5 : 1,
+                                        pointerEvents: product.stock === 0 ? 'none' : 'auto',
+                                    }}
+                                >
+                                    <Card.Section className={classes.imageSection}>
                                         <img
                                             src={product.image ? `/${product.image}` : noImage}
                                             alt={product.name}
@@ -150,18 +158,57 @@ export default function ProductPage({ products, categories, search = null, categ
                                             }}
                                         />
                                     </Card.Section>
-                                    <Text weight={500} mt="md" size="lg">{product.name}</Text>
-                                    <Text size="sm" color="dimmed">{product.description}</Text>
-                                    <Text size="sm" color="dimmed"
-                                          mt="sm">Categorie: {categories.find((category) => category.id === product.category_id)?.name || 'Geen'}</Text>
-                                    <Text weight={500} mt="md" color="green">{product.price}</Text>
-                                    <Button variant="filled" mt="md" fullWidth color="#1c64f2"
-                                            onClick={() => handleProductClick(product.id)}>
-                                        Bekijk
-                                    </Button>
-                                    <Button variant="outline" mt="sm" fullWidth color="#1c64f2" onClick={() => addToCart(product.id)}>
-                                        In winkelwagen
-                                    </Button>
+
+                                    <Group justify="space-between" mt="md">
+                                        <div>
+                                            <Text fw={500}>{product.name}</Text>
+                                            <Text fz="sm" c="dimmed">
+                                                {categories.find((category) => category.id === product.category_id)?.name || 'Geen'}
+                                            </Text>                                        </div>
+                                        {product.sale > 0 &&(
+                                            <Badge variant="outline" color="lightgreen">{product.sale}% off</Badge>
+                                        )}
+                                    </Group>
+
+                                    <Card.Section className={classes.section} mt="md">
+                                        <Text fz="sm" c="dimmed" className={classes.label}>Beschrijving</Text>
+                                        <Text>{product.description}</Text>
+                                        <Group gap={8} mb={-8}>
+
+                                        </Group>
+                                    </Card.Section>
+
+                                    <Card.Section className={classes.section}>
+                                        <Group gap={30}>
+                                            <div>
+                                                <Text fz="sm" c="dimmed" mt="sm">{product.stock} op voorraad</Text>
+                                                <Text weight={500} mt="md">€{product.price},00</Text>
+                                            </div>
+
+                                            <Button
+                                                onClick={() => handleProductClick(product.id)}
+                                                variant="outline"
+                                                mt="md"
+                                                fullWidth
+                                                color="#1c64f2"
+                                                radius="xl"
+                                                style={{ flex: 1 }}
+                                                disabled={product.stock === 0}
+                                            >
+                                                Bekijk dit product
+                                            </Button>
+                                            <Button
+                                                onClick={() => addToCart(product.id)}
+                                                variant="filled"
+                                                fullWidth
+                                                color="#1c64f2"
+                                                radius="xl"
+                                                disabled={product.stock === 0}
+                                            >
+                                                In winkelwagen
+                                            </Button>
+                                        </Group>
+                                    </Card.Section>
                                 </Card>
                             </Grid.Col>
                         ))

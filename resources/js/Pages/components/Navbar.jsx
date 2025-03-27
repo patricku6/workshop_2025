@@ -314,7 +314,14 @@ export function NavBar({}) {
                         <IconMoon onClick={toggleTheme} size={24} className="hover:text-[#1c64f2] transition-all cursor-pointer" />
                         }
                         {loggedIn && (
-                        <IconShoppingBag onClick={openCart} size={24} style={{ cursor: 'pointer' }} className="hover:text-[#1c64f2] transition-all" />
+                            <Group position="center" align="center" style={{ position: 'relative' }}>
+                                <IconShoppingBag onClick={openCart} size={24} style={{ cursor: 'pointer' }} className="hover:text-[#1c64f2] transition-all" />
+                                {cartData.length > 0 && (
+                                    <Text size="xs" color="white" style={{ position: 'absolute', top: '-5px', right: '-10px', backgroundColor: '#1c64f2', borderRadius: '50%', padding: '2px 6px' }}>
+                                        {cartData.length}
+                                    </Text>
+                                )}
+                            </Group>
                         )}
                         {loggedIn && (
                             <Menu shadow="md" width={200}>
@@ -343,7 +350,7 @@ export function NavBar({}) {
                 <ScrollArea h="calc(100vh - 80px)" mx="-md">
                     <SimpleGrid cols={1} spacing="md">
                         {cartData.length === 0 && (
-                            <Text align="center" color="dimmed">Geen items in uw winkelwagen</Text>
+                            <Text align="center" color="dimmed">Uw winkelwagen is leeg😢</Text>
                         )}
                         {cartData.map((item) => (
                             <Group key={item.id} justify="space-between" align="center" className="p-4 rounded-md">

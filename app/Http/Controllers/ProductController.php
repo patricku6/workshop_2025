@@ -41,8 +41,19 @@ class ProductController extends Controller
 
     public function show($id)
     {
+        $product = Product::find($id);
+        $category = Category::find($product->category_id);
+
+        if (!$product) {
+            return redirect()->back()->with('error', 'Product niet gevonden');
+        }
+
+        if ($product->stock === 0) {
+            return redirect()->back()->with('error', 'Product is uitverkocht');
+        }
         return Inertia::render('Product', [
-            'product' => Product::find($id)
+            'product' => $product,
+            'category' => $category
         ]);
     }
 
@@ -100,6 +111,7 @@ class ProductController extends Controller
             'stock' => 'required|integer',
             'image' => 'required|file|mimes:jpeg,png,jpg,gif,svg',
             'category_id' => 'nullable|exists:categories,id|integer',
+            'sale' => 'nullable|integer',
         ]);
 
         if ($validator->fails()) {
@@ -120,6 +132,7 @@ class ProductController extends Controller
             'stock' => $request->stock,
             'image' => $imageUrl,
             'category_id' => $request->category_id,
+            'sale' => $request->sale,
         ]);
 
         return redirect()->route('admin.products')->with('success', 'Product succesvol aangemaakt');

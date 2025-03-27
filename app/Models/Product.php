@@ -18,5 +18,6 @@ class Product extends Authenticatable
         'stock',
         'image',
         'category_id',
+        'sale'
     ];
 }

@@ -23,8 +23,8 @@ class AdminController extends Controller
 
     public function products()
     {
-        $products = Product::all();
-        $categories = Category::all();
+        $products = Product::orderBy('created_at', 'desc')->get();
+        $categories = Category::orderBy('created_at', 'desc')->get();
         return Inertia::render('admin/Products', ['products' => $products, 'categories' => $categories]);
     }
 
