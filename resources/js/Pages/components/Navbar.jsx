@@ -377,7 +377,7 @@ export function NavBar({}) {
                     <Group justify="space-between" className="sticky bottom-0 bg-white dark:bg-gray-800 p-4 rounded-t-md">
                         <Text>Totaal</Text>
                         <Text>€{cartData.reduce((acc, item) => acc + item.price * item.quantity, 0).toFixed(2)}</Text>
-                        <Button variant="filled" color="#1c64f2" fullWidth mt="md">Afrekenen</Button>
+                        <Button variant="filled" color="#1c64f2" fullWidth mt="md" onClick={() => { document.location.href = "/checkout" }}>Afrekenen</Button>
                     </Group>
                 </ScrollArea>
             </Drawer>

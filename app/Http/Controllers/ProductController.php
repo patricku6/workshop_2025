@@ -82,7 +82,8 @@ class ProductController extends Controller
 
         session()->put('cart', $cart);
 
-        return redirect()->route('products.index')->with('success', 'Product verwijderd uit winkelwagen');
+
+        return redirect()->back()->with('success', 'Product verwijderd uit winkelwagen');
     }
 
     public function getCart()

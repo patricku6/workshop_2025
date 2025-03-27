@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Middleware\VerifyAdmin;
@@ -64,3 +65,4 @@ Route::get('/getInitials', [AuthController::class, 'getInitials'])->name('getIni
 Route::get('/isAdmin', [AuthController::class, 'isAdmin'])->name('isAdmin');
 
 
+Route::get("/checkout", [CheckoutController::class, 'index'])->name('checkout.index');
