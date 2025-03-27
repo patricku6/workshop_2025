@@ -6,3 +6,4 @@ Copieer ``.env.example naar .env``
 - ``php artisan migrate``
 - ``php artisan serve`` & ``npm run dev`` tegelijkertijd
 - ``php artisan db:seed``
+- ``php artisan storage:link``
