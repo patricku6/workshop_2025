@@ -5,4 +5,4 @@ Copieer ``.env.example naar .env``
 - ``npm i``
 - ``php artisan migrate``
 - ``php artisan serve`` & ``npm run dev`` tegelijkertijd
-
+- ``php artisan db:seed``
