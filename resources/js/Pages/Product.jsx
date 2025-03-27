@@ -1,11 +1,11 @@
-import { Container, Title, Text, Button, Grid, Card, Image, TextInput, Select, Group } from '@mantine/core';
+import {Container, Title, Text, Button, Grid, Card, Image, TextInput, Group, NumberInput} from '@mantine/core';
 import Template from './Template.jsx';
 import { IconArrowBack } from '@tabler/icons-react';
 import {router} from "@inertiajs/react";
 import {toast} from "react-toastify";
 import noImage from "../../../public/images/noImage.png";
 
-export default function ProductDetailPage({ product }) {
+export default function ProductDetailPage({ product, category }) {
 
     const addToCart = () => {
         router.post(`/cart/add`, { product_id: product.id }, {
@@ -19,11 +19,10 @@ export default function ProductDetailPage({ product }) {
         <>
             <Template />
             <Container size="lg" py="xl" className="select-none">
-                {/* Product Detail Header */}
                 <Group position="apart" mb="lg">
                     <Button
                         variant="outline"
-                        color="blue"
+                        color="#1c64f2"
                         leftIcon={<IconArrowBack size={16} />}
                         onClick={() => window.history.back()}
                     >
@@ -35,8 +34,7 @@ export default function ProductDetailPage({ product }) {
                 </Group>
 
                 <Grid gutter="xl" align="center">
-                    <Grid.Col span={12} md={6}>
-                        {/* Product Image */}
+                    <Grid.Col span={6} md={6}>
                         <Card shadow="sm" radius="md" withBorder>
                             <Card.Section>
                                 <Image
@@ -54,17 +52,15 @@ export default function ProductDetailPage({ product }) {
                         </Card>
                     </Grid.Col>
 
-                    <Grid.Col span={12} md={6}>
-                        {/* Product Info */}
+                    <Grid.Col span={6} md={6}>
                         <Card shadow="sm" padding="lg" radius="md" withBorder>
-                            <Text weight={500} size="xl" color="#1c64f2">{product.name}</Text>
+                            <Text weight={500} size="xl">{product.name}</Text>
                             <Text size="sm" color="dimmed" mt="sm">{product.description}</Text>
-                            <Text weight={500} mt="md" size="lg" color="green">{product.price}</Text>
-                            <Text size="sm" color="dimmed" mt="sm">Categorie: {product.category}</Text>
+                            <Text weight={500} mt="md" size="lg">€{product.price},00</Text>
+                            <Text size="sm" color="dimmed" mt="sm">Categorie: {category.name}</Text>
                             <Text size="sm" color="dimmed" mt="sm">Beschikbare voorraad: {product.stock}</Text>
 
-                            {/* Add to Cart / Quantity selector */}
-                            <TextInput
+                            <NumberInput
                                 label="Aantal"
                                 placeholder="Aantal"
                                 type="number"

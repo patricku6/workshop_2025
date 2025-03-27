@@ -30,6 +30,7 @@ export default function Products({ products, categories }) {
         price: 0,
         stock: 0,
         category_id: 0,
+        sale: 0,
     });
     const [productToDelete, setProductToDelete] = useState(null);
     const [editing, setEditing] = useState(false);
@@ -40,9 +41,9 @@ export default function Products({ products, categories }) {
             setEditing(true);
             setProduct({
                 ...selectedProduct,
-                price: Number(selectedProduct.price),        // FIXED
-                stock: Number(selectedProduct.stock),        // FIXED
-                category_id: Number(selectedProduct.category_id), // FIXED
+                price: Number(selectedProduct.price),
+                stock: Number(selectedProduct.stock),
+                category_id: Number(selectedProduct.category_id),
             });
             open();
         }
@@ -53,9 +54,10 @@ export default function Products({ products, categories }) {
         formData.append("id", product.id || "");
         formData.append("name", product.name);
         formData.append("description", product.description);
-        formData.append("price", Number(product.price));          // FIXED
-        formData.append("stock", Number(product.stock));          // FIXED
-        formData.append("category_id", Number(product.category_id)); // FIXED
+        formData.append("price", Number(product.price));
+        formData.append("stock", Number(product.stock));
+        formData.append("category_id", Number(product.category_id));
+        formData.append("sale", Number(product.sale));
 
         if (product.image instanceof File) {
             formData.append("image", product.image);
@@ -68,6 +70,7 @@ export default function Products({ products, categories }) {
                         "Content-Type": "multipart/form-data",
                     },
                     onError: (error) => toast.error(error.message),
+                    onSucces: () => toast.success("Product succesvol bijgewerkt"),
                 });
                 setEditing(false);
             } else {
@@ -76,6 +79,7 @@ export default function Products({ products, categories }) {
                         "Content-Type": "multipart/form-data",
                     },
                     onError: (error) => toast.error(error.message),
+                    onSucces: () => toast.success("Product succesvol toegevoegd"),
                 });
             }
             close();
@@ -130,7 +134,7 @@ export default function Products({ products, categories }) {
                             <Title order={4} className="mt-4">{product.name}</Title>
                             <p className="text-gray-600">{product.description}</p>
                             <p className="text-indigo-600 font-bold mt-2">
-                                ${Number(product.price).toFixed(2)} {/* FIXED */}
+                                €{Number(product.price).toFixed(2)}
                             </p>
                             <p className="text-gray-500">Voorraad: {product.stock}</p>
                             <p className="text-gray-500">
@@ -164,7 +168,8 @@ export default function Products({ products, categories }) {
                         value={String(product.category_id)}
                         onChange={(value) => setProduct({ ...product, category_id: Number(value) })}
                     />
-                    <NumberInput label="Prijs" value={product.price} onChange={(value) => setProduct({ ...product, price: value })} prefix="$" min={0} />
+                    <NumberInput label="Prijs" value={product.price} onChange={(value) => setProduct({ ...product, price: value })} prefix="€" min={0} />
+                    <NumberInput label="Korting %" value={product.sale} onChange={(value) => setProduct({ ...product, sale: value })} min={0} />
                     <NumberInput label="Voorraad" value={product.stock} onChange={(value) => setProduct({ ...product, stock: value })} min={0} />
                     <Divider my="sm" />
                     <div className="flex justify-between mt-4">
