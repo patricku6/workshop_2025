@@ -4,7 +4,7 @@ import {
     IconGenderFemale, IconGenderMale, IconMoodKid,
     IconSearch,
     IconShoppingBag,
-    IconMoon, IconSun, IconX
+    IconMoon, IconSun, IconTrash
 } from '@tabler/icons-react';
 import {
     Anchor, Autocomplete,
@@ -369,7 +369,7 @@ export function NavBar({}) {
                                 </Group>
                                 <Text>{item.quantity}x</Text>
                                 <Text>€{Number(item.price).toFixed(2)}</Text>
-                                <IconX size={20} color="red" className="cursor-pointer hover:scale-110 transition-all" onClick={() => { removeItem(item.id) }} />
+                                <IconTrash size={20} color="red" className="cursor-pointer hover:scale-110 transition-all" onClick={() => { removeItem(item.id) }} />
                             </Group>
                         ))}
                     </SimpleGrid>
