@@ -91,7 +91,7 @@ export default function Users({ users, setUsers }) {
                         <Divider my="sm" />
                         <div className="flex justify-between mt-4">
                             <Button onClick={close} color="gray" size="sm" radius="md" variant="outline">Terug</Button>
-                            <Button color="blue" size="sm" radius="md" onClick={saveUser}>Opslaan</Button>
+                            <Button color="#1c64f2" size="sm" radius="md" onClick={saveUser}>Opslaan</Button>
                         </div>
                     </div>
                 </div>
@@ -147,7 +147,7 @@ export default function Users({ users, setUsers }) {
                                                 </Button>
                                             </Menu.Target>
                                             <Menu.Dropdown>
-                                                <Menu.Item icon={<IconEdit size={14} />} onClick={() => editUser(user.id)}>
+                                                <Menu.Item icon={<IconEdit size={14} />} onClick={() => editUser(user.id)} color="#1c64f2">
                                                     Bewerk
                                                 </Menu.Item>
                                                 <Menu.Item icon={<IconTrash size={14} />} color="red" onClick={() => handleDeleteClick(user.id)}>

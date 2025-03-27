@@ -43,7 +43,7 @@ export default function Categories({ categories, setCategories }) {
                     <Divider my="sm" />
                     <div className="flex justify-between mt-4">
                         <Button onClick={close} color="gray" size="sm" radius="md" variant="outline">Terug</Button>
-                        <Button color="blue" size="sm" radius="md" onClick={addCategory}>Toevoegen</Button>
+                        <Button color="#1c64f2" size="sm" radius="md" onClick={addCategory}>Toevoegen</Button>
                     </div>
                 </div>
             </Modal>
@@ -65,7 +65,7 @@ export default function Categories({ categories, setCategories }) {
                 <div className="p-6">
                     <div className="flex justify-between mb-6">
                         <Title order={1} className="text-indigo-600">Categorieën</Title>
-                        <Button leftSection={<IconPlus size={16} />} onClick={open}>Nieuwe Categorie</Button>
+                        <Button color="#1c64f2" leftSection={<IconPlus size={16} />} onClick={open}>Nieuwe Categorie</Button>
                     </div>
                     <Card shadow="sm" padding="lg" radius="md" withBorder className="mt-4">
                         <Table striped highlightOnHover>

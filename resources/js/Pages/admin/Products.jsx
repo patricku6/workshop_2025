@@ -136,12 +136,13 @@ export default function Products({ products, categories }) {
                             <p className="text-indigo-600 font-bold mt-2">
                                 €{Number(product.price).toFixed(2)}
                             </p>
+                            <p className="text-red-600">Korting: {product.sale}%</p>
                             <p className="text-gray-500">Voorraad: {product.stock}</p>
                             <p className="text-gray-500">
                                 Categorie: {categories.find(category => category.id === product.category_id)?.name ?? 'Geen'}
                             </p>
                             <div className="flex justify-between mt-4">
-                                <Button size="xs" color="blue" leftSection={<IconEdit size={14} />} onClick={() => editProduct(product.id)}>Bewerk</Button>
+                                <Button size="xs" color="#1c64f2" leftSection={<IconEdit size={14} />} onClick={() => editProduct(product.id)}>Bewerk</Button>
                                 <Button size="xs" color="red" leftSection={<IconTrash size={14} />} onClick={() => handleDeleteClick(product.id)}>Verwijder</Button>
                             </div>
                         </Card>
@@ -174,7 +175,7 @@ export default function Products({ products, categories }) {
                     <Divider my="sm" />
                     <div className="flex justify-between mt-4">
                         <Button onClick={close} color="gray" variant="outline">Terug</Button>
-                        <Button color="blue" onClick={saveProduct}>{product.id ? "Sla wijzigingen op" : "Voeg product toe"}</Button>
+                        <Button color="#1c64f2" onClick={saveProduct}>{product.id ? "Sla wijzigingen op" : "Voeg product toe"}</Button>
                     </div>
                 </div>
             </Modal>

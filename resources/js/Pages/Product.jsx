@@ -4,8 +4,11 @@ import { IconArrowBack } from '@tabler/icons-react';
 import {router} from "@inertiajs/react";
 import {toast} from "react-toastify";
 import noImage from "../../../public/images/noImage.png";
+import {useEffect, useState} from "react";
 
 export default function ProductDetailPage({ product, category }) {
+
+    const [loggedIn, setLoggedIn] = useState(false);
 
     const addToCart = () => {
         router.post(`/cart/add`, { product_id: product.id }, {
@@ -14,6 +17,32 @@ export default function ProductDetailPage({ product, category }) {
             }
         });
     }
+
+    const fetchLoggedInUser = async () => {
+        const response = await fetch('/isLoggedIn', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (response.ok) {
+            return response.json();
+        }
+
+        return null;
+    };
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const userData = await fetchLoggedInUser();
+            setLoggedIn(userData === 1);
+
+        };
+
+        fetchData();
+    }, []);
 
     return (
         <>
@@ -69,8 +98,8 @@ export default function ProductDetailPage({ product, category }) {
                                 defaultValue={1}
                                 mt="md"
                             />
-                            <Button variant="filled" color="#1c64f2" fullWidth mt="md" onClick={addToCart}>
-                                Voeg toe aan winkelwagen
+                            <Button variant="filled" color="#1c64f2" fullWidth mt="md" onClick={addToCart} disabled={!loggedIn}>
+                                {loggedIn ? 'Voeg toe aan winkelwagen' : 'Log in om te bestellen'}
                             </Button>
                         </Card>
                     </Grid.Col>

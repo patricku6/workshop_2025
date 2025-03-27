@@ -48,7 +48,7 @@ class ProductController extends Controller
             return redirect()->back()->with('error', 'Product niet gevonden');
         }
 
-        if ($product->stock === 0) {
+        if ($product->stock <= 0) {
             return redirect()->back()->with('error', 'Product is uitverkocht');
         }
         return Inertia::render('Product', [
@@ -71,6 +71,7 @@ class ProductController extends Controller
                 'quantity' => 1,
                 'price' => $product->price,
                 'image' => $product->image,
+                'sale' => $product->sale,
             ];
         }
 
@@ -148,19 +149,19 @@ class ProductController extends Controller
             'stock' => 'required|integer',
             'image' => 'nullable|file|mimes:jpeg,png,jpg,gif,svg',
             'category_id' => 'nullable|exists:categories,id',
+            'sale' => 'nullable|integer',
         ]);
 
         if ($validator->fails()) {
             return back()->with('error', $validator->errors());
         }
-
         $product = Product::find($request->id);
 
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('public/products');
             $imageUrl = str_replace('public/', 'storage/', $imagePath);
         } else {
-            return back()->with('error', 'Afbeelding niet geüpload');
+            $imageUrl = $product->image;
         }
 
         $product->update([
@@ -170,6 +171,7 @@ class ProductController extends Controller
             'stock' => $request->stock,
             'image' => $imageUrl,
             'category_id' => $request->category_id,
+            'sale' => $request->sale,
         ]);
 
         return redirect()->route('admin.products')->with('success', 'Product succesvol bijgewerkt');

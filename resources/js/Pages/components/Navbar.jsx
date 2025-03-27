@@ -58,6 +58,7 @@ export function NavBar({}) {
     const [admin, setAdmin] = useState(false);
     let [cartData, setCartData] = useState([]);
     const [categories, setCategories] = useState([]);
+    const [saleAmount, setSaleAmount] = useState(0);
 
     const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'dark');
     const isDarkMode = theme === 'dark';
@@ -124,21 +125,36 @@ export function NavBar({}) {
     }
 
     const fetchCart = async () => {
-        const response = await fetch('/cart/get', {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-        });
+        try {
+            const response = await fetch('/cart/get', {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+            });
 
-        if (response.ok) {
+            if (!response.ok) {
+                throw new Error('Failed to fetch cart');
+            }
+
             const data = await response.json();
-            return Array.isArray(data) ? data : Object.values(data);
-        }
+            if (!data) return [];
 
-        return [];
-    }
+            const cartArray = Object.values(data).map(item => ({
+                ...item,
+                price: calculateSale(item.price, item.sale),
+            }));
+
+            cartArray.forEach(item => {
+                setSaleAmount(item.price - saleAmount + (item.price - (item.price * (item.sale / 100))));
+            });
+            return cartArray;
+        } catch (error) {
+            console.error('Error fetching cart:', error);
+            return [];
+        }
+    };
 
     const fetchCategories = async () => {
         const response = await fetch('/categories', {
@@ -211,6 +227,10 @@ export function NavBar({}) {
         fetchCart().then((data) => {
             setCartData(data);
         });
+    }
+
+    const calculateSale = (price, sale) => {
+        return price - (price * (sale / 100));
     }
 
     const links = mockdata.map((item) => (
@@ -382,10 +402,24 @@ export function NavBar({}) {
                     </SimpleGrid>
                     <Divider my="md" />
                     <Group justify="space-between" className="sticky bottom-0 bg-white dark:bg-gray-800 p-4 rounded-t-md">
-                        <Text>Totaal</Text>
-                        <Text>€{cartData.reduce((acc, item) => acc + item.price * item.quantity, 0).toFixed(2)}</Text>
-                        <Button variant="filled" color="#1c64f2" fullWidth mt="md" onClick={() => { document.location.href = "/checkout" }}>Afrekenen</Button>
+                        <div>
+                            <Text>Subtotaal:</Text>
+                            <Text color="lightgreen">Korting:</Text>
+                        </div>
+                        <div>
+                            <Text>€{cartData.reduce((acc, item) => acc + item.price * item.quantity, 0).toFixed(2)}</Text>
+                            <Text color="lightgreen">€{saleAmount.toFixed(2)}</Text>
+                        </div>
                     </Group>
+                    <Button
+                        variant="filled"
+                        color="#1c64f2"
+                        fullWidth
+                        mt="md"
+                        onClick={() => { document.location.href = "/checkout" }}
+                    >
+                        Afrekenen
+                    </Button>
                 </ScrollArea>
             </Drawer>
             )}

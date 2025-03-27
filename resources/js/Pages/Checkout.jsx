@@ -72,7 +72,7 @@ export default function CheckoutPage({ cart }) {
                 <Group position="apart" mb="lg">
                     <Button
                         variant="outline"
-                        color="blue"
+                        color="#1c64f2"
                         leftIcon={<IconArrowBack size={16} />}
                         onClick={() => window.history.back()}
                     >
@@ -81,7 +81,7 @@ export default function CheckoutPage({ cart }) {
                     <Title color="#1c64f2">Winkelwagen</Title>
                 </Group>
 
-                {cartItems.length === 0 ? (
+                {cartItems.length <= 0 ? (
                     <Stack align="center" justify="center" spacing="sm" mt="xl">
                         <Text size="xl" className="flex items-center gap-4" fw={600} align="center">Je winkelwagen is leeg <span className="text-4xl">😢</span></Text>
                         <Text size="sm" color="dimmed" align="center">

@@ -1,7 +1,7 @@
 import { Container, Title, Text, Button, Grid, Card, Image, TextInput, Select, Group, Badge } from '@mantine/core';
 import Template from './Template.jsx';
 import { IconSearch, IconChevronDown } from '@tabler/icons-react';
-import { useState } from 'react';
+import {useEffect, useState} from 'react';
 import noImage from '../../../public/images/noImage.png';
 import {router} from "@inertiajs/react";
 import {toast, ToastContainer} from "react-toastify";
@@ -10,6 +10,7 @@ import classes from '../../css/FeatureCard.module.css';
 export default function ProductPage({ products, categories, search = null, category = null }) {
     const [searchTerm, setSearchTerm] = useState('');
     const [opened, setOpened] = useState(false);
+    const [loggedIn, setLoggedIn] = useState(false);
 
     const [title, setTitle] = useState(search !== null ? "Resultaten voor '" + search + "'" : (category !== null ? category || "Onze Fietsen" : "Onze Fietsen"));
     const [sortOption, setSortOption] = useState(null);
@@ -60,6 +61,32 @@ export default function ProductPage({ products, categories, search = null, categ
             }
         });
     }
+
+    const fetchLoggedInUser = async () => {
+        const response = await fetch('/isLoggedIn', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (response.ok) {
+            return response.json();
+        }
+
+        return null;
+    };
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const userData = await fetchLoggedInUser();
+            setLoggedIn(userData === 1);
+
+        };
+
+        fetchData();
+    }, []);
 
     return (
         <>
@@ -137,8 +164,8 @@ export default function ProductPage({ products, categories, search = null, categ
                                     radius="md"
                                     className={classes.card}
                                     style={{
-                                        opacity: product.stock === 0 ? 0.5 : 1,
-                                        pointerEvents: product.stock === 0 ? 'none' : 'auto',
+                                        opacity: product.stock <= 0 ? 0.5 : 1,
+                                        pointerEvents: product.stock <= 0 ? 'none' : 'auto',
                                     }}
                                 >
                                     <Card.Section className={classes.imageSection}>
@@ -193,7 +220,7 @@ export default function ProductPage({ products, categories, search = null, categ
                                                 color="#1c64f2"
                                                 radius="xl"
                                                 style={{ flex: 1 }}
-                                                disabled={product.stock === 0}
+                                                disabled={product.stock <= 0}
                                             >
                                                 Bekijk dit product
                                             </Button>
@@ -203,9 +230,9 @@ export default function ProductPage({ products, categories, search = null, categ
                                                 fullWidth
                                                 color="#1c64f2"
                                                 radius="xl"
-                                                disabled={product.stock === 0}
+                                                disabled={product.stock <= 0 || !loggedIn}
                                             >
-                                                In winkelwagen
+                                                {loggedIn ? 'Voeg toe aan winkelwagen' : (product.stock <= 0 ? 'Niet op voorraad' : 'Log in om te bestellen')}
                                             </Button>
                                         </Group>
                                     </Card.Section>
