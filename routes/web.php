@@ -66,3 +66,4 @@ Route::get('/isAdmin', [AuthController::class, 'isAdmin'])->name('isAdmin');
 
 
 Route::get("/checkout", [CheckoutController::class, 'index'])->name('checkout.index');
+Route::post("/checkout", [CheckoutController::class, 'store'])->name('checkout.store');
