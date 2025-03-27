@@ -48,6 +48,7 @@ export default function Login() {
                 toast.success("Gefeliciteerd! Je account is aangemaakt!");
                 setError(false);
                 setLoading(false);
+                router.get("/");
             },
         });
     }
