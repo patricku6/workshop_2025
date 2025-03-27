@@ -102,7 +102,7 @@ export default function Profile({ user }) {
                         </Button>
                     </form>
                 </div>
-                <ToastContainer />
+                <ToastContainer position="bottom-right" />
             </div>
         </>
     );

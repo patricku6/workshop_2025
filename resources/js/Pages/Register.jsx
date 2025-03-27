@@ -104,7 +104,7 @@ export default function Login() {
                         <Anchor href="/login" className="block mt-4 text-center">Heb je al een account? Login</Anchor>
                     </form>
                 </div>
-                <ToastContainer />
+                <ToastContainer position="bottom-right" />
             </div>
         </>
     );

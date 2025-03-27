@@ -4,7 +4,7 @@ import {
     IconGenderFemale, IconGenderMale, IconMoodKid,
     IconSearch,
     IconShoppingBag,
-    IconMoon, IconSun,
+    IconMoon, IconSun, IconX
 } from '@tabler/icons-react';
 import {
     Anchor, Autocomplete,
@@ -199,6 +199,20 @@ export function NavBar({}) {
         router.get(`/products/category/${category}`);
     }
 
+    const openCart = () => {
+        fetchCart().then((data) => {
+            setCartData(data);
+            open();
+        });
+    }
+
+    const removeItem = (id) => {
+        router.post(`/cart/remove`, { product_id: id });
+        fetchCart().then((data) => {
+            setCartData(data);
+        });
+    }
+
     const links = mockdata.map((item) => (
         <Text key={item.title} onClick={() => category(item.title)}>
         <UnstyledButton className={classes.subLink} key={item.title} href="#">
@@ -220,6 +234,7 @@ export function NavBar({}) {
     ));
 
     return (
+        <>
         <Box className="shadow-sm select-none">
             <header className={classes.header}>
                 <Group justify="space-between" h="100%">
@@ -299,7 +314,7 @@ export function NavBar({}) {
                         <IconMoon onClick={toggleTheme} size={24} className="hover:text-[#1c64f2] transition-all cursor-pointer" />
                         }
                         {loggedIn && (
-                        <IconShoppingBag onClick={open} size={24} style={{ cursor: 'pointer' }} className="hover:text-[#1c64f2] transition-all" />
+                        <IconShoppingBag onClick={openCart} size={24} style={{ cursor: 'pointer' }} className="hover:text-[#1c64f2] transition-all" />
                         )}
                         {loggedIn && (
                             <Menu shadow="md" width={200}>
@@ -327,6 +342,9 @@ export function NavBar({}) {
             <Drawer opened={opened} onClose={close} title="Winkelwagen" position="right">
                 <ScrollArea h="calc(100vh - 80px)" mx="-md">
                     <SimpleGrid cols={1} spacing="md">
+                        {cartData.length === 0 && (
+                            <Text align="center" color="dimmed">Geen items in uw winkelwagen</Text>
+                        )}
                         {cartData.map((item) => (
                             <Group key={item.id} justify="space-between" align="center" className="p-4 rounded-md">
                                 <Group align="center">
@@ -339,11 +357,19 @@ export function NavBar({}) {
                                             e.target.onerror = null;
                                             e.target.src = noImage;
                                         }}
+                                        style={{
+                                            objectFit: 'cover',
+                                            width: '100%',
+                                            height: '200px',
+                                            display: 'block',
+                                            margin: 'auto',
+                                        }}
                                     />
                                     <Text>{item.name}</Text>
                                 </Group>
                                 <Text>{item.quantity}x</Text>
                                 <Text>€{item.price.toFixed(2)}</Text>
+                                <IconX size={20} color="red" className="cursor-pointer hover:scale-110 transition-all" onClick={() => { removeItem(item.id) }} />
                             </Group>
                         ))}
                     </SimpleGrid>
@@ -389,6 +415,7 @@ export function NavBar({}) {
                 </ScrollArea>
             </Drawer>
         </Box>
+        </>
     );
 }
 

@@ -65,7 +65,7 @@ export default function Login() {
                             Registreer</Anchor>
                     </form>
                 </div>
-                <ToastContainer/>
+                <ToastContainer position="bottom-right" />
             </div>
         </>
     );

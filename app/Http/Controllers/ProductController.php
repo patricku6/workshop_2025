@@ -30,11 +30,12 @@ class ProductController extends Controller
 
     public function indexByCategory($category)
     {
-        $categoryId = Category::where('name', $category)->first()->id;
+        $categoryId = is_numeric($category) ? $category : Category::where('name', $category)->first()->id;
+        $categoryName = Category::find($categoryId)->name ?? $category;
         return Inertia::render('Products', [
             'products' => Product::where('category_id', $categoryId)->get(),
             'categories' => Category::all(),
-            'category' => $category
+            'category' => $categoryName
         ]);
     }
 
@@ -54,6 +55,7 @@ class ProductController extends Controller
             $cart[$request->product_id]['quantity']++;
         } else {
             $cart[$request->product_id] = [
+                'id' => $product->id,
                 'name' => $product->name,
                 'quantity' => 1,
                 'price' => $product->price,
@@ -64,6 +66,23 @@ class ProductController extends Controller
         session()->put('cart', $cart);
 
         return redirect()->route('products.index')->with('success', 'Product toegevoegd aan winkelwagen');
+    }
+
+    public function removeFromCart(Request $request)
+    {
+        $cart = session()->get('cart', []);
+
+        if (isset($cart[$request->product_id])) {
+            if ($cart[$request->product_id]['quantity'] > 1) {
+                $cart[$request->product_id]['quantity']--;
+            } else {
+                unset($cart[$request->product_id]);
+            }
+        }
+
+        session()->put('cart', $cart);
+
+        return redirect()->route('products.index')->with('success', 'Product verwijderd uit winkelwagen');
     }
 
     public function getCart()

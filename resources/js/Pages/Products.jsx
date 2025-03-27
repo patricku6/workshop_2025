@@ -1,12 +1,14 @@
 import { Container, Title, Text, Button, Grid, Card, Image, TextInput, Select } from '@mantine/core';
 import Template from './Template.jsx';
-import { IconSearch } from '@tabler/icons-react';
+import { IconSearch, IconChevronDown } from '@tabler/icons-react';
 import { useState } from 'react';
 import noImage from '../../../public/images/noImage.png';
 import {router} from "@inertiajs/react";
+import {toast, ToastContainer} from "react-toastify";
 
 export default function ProductPage({ products, categories, search = null, category = null }) {
     const [searchTerm, setSearchTerm] = useState('');
+    const [opened, setOpened] = useState(false);
 
     const [title, setTitle] = useState(search !== null ? "Resultaten voor '" + search + "'" : (category !== null ? category || "Onze Fietsen" : "Onze Fietsen"));
     const [sortOption, setSortOption] = useState(null);
@@ -45,8 +47,17 @@ export default function ProductPage({ products, categories, search = null, categ
     }
 
     const handleCategoryChange = (value) => {
+        router.visit(`/products/category/${value}`);
         setSortOption(value);
         setTitle(categories.find((category) => category.id === Number(value))?.name || "Onze Fietsen");
+    }
+
+    const addToCart = (id) => {
+        router.post(`/cart/add`, { product_id: id }, {
+            onSuccess: () => {
+                toast.success('Product toegevoegd aan winkelwagen');
+            }
+        });
     }
 
     return (
@@ -84,6 +95,15 @@ export default function ProductPage({ products, categories, search = null, categ
                                 { value: 'name_za', label: 'Sorteer op naam (Z-A)' },
                             ]}
                             fullWidth
+                            rightSection={
+                                <IconChevronDown
+                                    size={18}
+                                    color="#1c64f2"
+                                    style={{ transform: opened ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.2s ease" }}
+                                />
+                            }
+                            onDropdownOpen={() => setOpened(true)}
+                            onDropdownClose={() => setOpened(false)}
                         />
                     </Grid.Col>
                     <Grid.Col span={12} sm={12}>
@@ -96,6 +116,7 @@ export default function ProductPage({ products, categories, search = null, categ
                                 label: category.name,
                             }))}
                             fullWidth
+                            rightSection={<IconChevronDown size={18} color="#1c64f2" />}
                         />
                     </Grid.Col>
 
@@ -138,6 +159,9 @@ export default function ProductPage({ products, categories, search = null, categ
                                             onClick={() => handleProductClick(product.id)}>
                                         Bekijk
                                     </Button>
+                                    <Button variant="outline" mt="sm" fullWidth color="#1c64f2" onClick={() => addToCart(product.id)}>
+                                        In winkelwagen
+                                    </Button>
                                 </Card>
                             </Grid.Col>
                         ))
@@ -160,6 +184,7 @@ export default function ProductPage({ products, categories, search = null, categ
                     </Button>
                 </Card>
             </Container>
+            <ToastContainer position="bottom-right" />
         </>
     );
 }

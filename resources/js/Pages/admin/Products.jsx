@@ -33,7 +33,6 @@ export default function Products({ products, categories }) {
     });
     const [productToDelete, setProductToDelete] = useState(null);
     const [editing, setEditing] = useState(false);
-    console.log(products)
 
     const editProduct = (id) => {
         const selectedProduct = products.find(product => product.id === id);
@@ -178,7 +177,7 @@ export default function Products({ products, categories }) {
                     </div>
                 </div>
             </Modal>
-            <ToastContainer />
+            <ToastContainer position="bottom-right" />
         </AdminTemplate>
     );
 }

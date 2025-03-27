@@ -36,6 +36,7 @@ Route::get('/categories', [CategoryController::class, 'fetchCategories'])->name(
 
 Route::post('cart/add', [ProductController::class, 'addToCart'])->name('cart.add');
 Route::get('cart/get', [ProductController::class, 'getCart'])->name('cart.get');
+Route::post('cart/remove', [ProductController::class, 'removeFromCart'])->name('cart.remove');
 
 Route::post('/profile-update', [ProfileController::class, 'update'])->name('profile.update');
 
@@ -45,7 +46,7 @@ Route::post('/create', [AuthController::class, 'create'])->name('create');
 
 Route::post('/authenticate', [AuthController::class, 'authenticate'])->name('authenticate');
 
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard')->middleware(VerifyAdmin::class, 'auth');
 Route::get('/admin/users', [AdminController::class, 'users'])->name('admin.users')->middleware(VerifyAdmin::class, 'auth');
