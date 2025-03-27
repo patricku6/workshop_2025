@@ -48,11 +48,13 @@ export default function AdminDashboard() {
             </div>
 
             <div className={classes.footer}>
-                <a href="#" className={classes.link} onClick={(event) => { router.post('/logout'); event.preventDefault(); }}>
+                <a href="#" className={classes.link} onClick={(event) => { router.get('/logout'); event.preventDefault(); }}>
                     <IconLogout className={classes.linkIcon} stroke={1.5} />
                     <span>Logout</span>
                 </a>
             </div>
         </nav>
     );
+
+    
 }
