@@ -6,6 +6,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Middleware\VerifyAdmin;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -32,6 +33,10 @@ Route::get('/products', [ProductController::class, 'index'])->name('products.ind
 Route::get('/products/{search}', [ProductController::class, 'search'])->name('products.search');
 Route::get('/products/category/{category}', [ProductController::class, 'indexByCategory'])->name('products.category');
 Route::get('/product/{id}', [ProductController::class, 'show'])->name('products.show');
+
+Route::get('/reviews', [ReviewController::class, 'index']);
+Route::get('/reviews/get', [ReviewController::class, 'getReviews'])->name('reviews.get');
+Route::post('/reviews/post', [ReviewController::class, 'store'])->name('reviews.post');
 
 Route::get('/categories', [CategoryController::class, 'fetchCategories'])->name('admin.categories');
 
