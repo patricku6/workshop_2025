@@ -12,6 +12,7 @@ const data = [
     { label: 'Gebruikers', link: '/admin/users', icon: IconUser },
     { label: 'Producten', link: '/admin/products', icon: IconDatabaseImport },
     { label: 'Categorieën', link: '/admin/categories', icon: IconDatabaseImport },
+    { label: 'Aankopen', link: '/admin/purchases', icon: IconDatabaseImport },
 ];
 
 export default function AdminDashboard() {
@@ -56,5 +57,5 @@ export default function AdminDashboard() {
         </nav>
     );
 
-    
+
 }

@@ -353,6 +353,7 @@ export function NavBar({}) {
 
                                 <Menu.Dropdown>
                                     <Menu.Item onClick={() => { document.location.href = '/profile' }}>Profiel</Menu.Item>
+                                    <Menu.Item onClick={() => { document.location.href = '/purchases' }}>Aankopen</Menu.Item>
                                     {admin && <Menu.Item onClick={() => { document.location.href = '/admin/dashboard' }}>Admin Dashboard</Menu.Item>}
                                     <Menu.Divider />
                                     <Menu.Item onClick={logout}>Uitloggen</Menu.Item>

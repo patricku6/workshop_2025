@@ -65,6 +65,9 @@ Route::get('/isLoggedIn', [AuthController::class, 'isLoggedIn'])->name('isLogged
 Route::get('/getInitials', [AuthController::class, 'getInitials'])->name('getInitials');
 Route::get('/isAdmin', [AuthController::class, 'isAdmin'])->name('isAdmin');
 
+Route::get('/admin/purchases', [AdminController::class, 'purchases'])->name('admin.purchases');
+Route::post('/admin/purchases/delete', [AdminController::class, 'deletePurchase']);
+Route::post('/admin/purchases/update', [AdminController::class, 'updatePurchase']); // optional
 
 Route::get("/checkout", [CheckoutController::class, 'index'])->name('checkout.index');
 Route::post("/checkout", [CheckoutController::class, 'store'])->name('checkout.store');
