@@ -33,7 +33,7 @@ export default function Purchases({ purchases }) {
                         <Divider my="sm" />
                         <Group position="apart">
                             <Text weight={600}>Totaal</Text>
-                            <Text weight={600}>€{(purchase.bedrag / 100).toFixed(2)}</Text>
+                            <Text weight={600}>€{(purchase.bedrag).toFixed(2)}</Text>
                         </Group>
                     </Card>
                 ))}
