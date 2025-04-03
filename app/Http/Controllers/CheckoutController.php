@@ -37,4 +37,9 @@ class CheckoutController extends Controller
         session()->forget('cart');
         return redirect()->route('checkout.index')->with('success', 'Bedankt voor uw bestelling');
     }
+
+    public function showPurchases(){
+        $purchases = Purchase::where('user_id', auth()->user()->id)->get();
+        return Inertia::render('Purchases', ['purchases' => $purchases]);
+    }
 }

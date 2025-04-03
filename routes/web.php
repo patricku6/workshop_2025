@@ -26,6 +26,7 @@ Route::get('/about-us', function () {
     return Inertia::render('AboutUs');
 })->name('about-us');
 
+
 Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index')->middleware('auth');
 
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
@@ -67,3 +68,4 @@ Route::get('/isAdmin', [AuthController::class, 'isAdmin'])->name('isAdmin');
 
 Route::get("/checkout", [CheckoutController::class, 'index'])->name('checkout.index');
 Route::post("/checkout", [CheckoutController::class, 'store'])->name('checkout.store');
+Route::get('/purchases', [CheckoutController::class, 'showPurchases'])->name('showPurchases')->middleware('auth');

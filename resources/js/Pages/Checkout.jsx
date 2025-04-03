@@ -18,6 +18,7 @@ import Template from './Template.jsx';
 import noImage from '../../../public/images/noImage.png';
 import { router } from '@inertiajs/react';
 import { IconArrowBack, IconX } from '@tabler/icons-react';
+import {toast} from "react-toastify";
 
 export default function CheckoutPage({ cart }) {
     const cartItems = Object.values(cart);
@@ -59,8 +60,7 @@ export default function CheckoutPage({ cart }) {
 
         router.post('/checkout', payload, {
             onSuccess: () => {
-                alert('Bestelling succesvol geplaatst!');
-                router.visit('/');
+                toast.success('Bestelling geplaatst! Je ontvangt een bevestiging per e-mail.');
             },
         });
     };
