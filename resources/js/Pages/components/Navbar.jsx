@@ -4,7 +4,7 @@ import {
     IconGenderFemale, IconGenderMale, IconMoodKid,
     IconSearch,
     IconShoppingBag,
-    IconMoon, IconSun, IconTrash
+    IconMoon, IconSun, IconTrash, IconPlus, IconMinus
 } from '@tabler/icons-react';
 import {
     Anchor, Autocomplete,
@@ -146,9 +146,11 @@ export function NavBar({}) {
                 price: calculateSale(item.price, item.sale),
             }));
 
-            cartArray.forEach(item => {
-                setSaleAmount(item.price - saleAmount + (item.price - (item.price * (item.sale / 100))));
-            });
+            const totalDiscount = cartArray.reduce((acc, item) => {
+                return acc + (item.price * (item.sale / 100)) * item.quantity;
+            }, 0);
+
+            setSaleAmount(totalDiscount);
             return cartArray;
         } catch (error) {
             console.error('Error fetching cart:', error);
@@ -223,6 +225,20 @@ export function NavBar({}) {
     }
 
     const removeItem = (id) => {
+        router.post(`/cart/delete`, { product_id: id });
+        fetchCart().then((data) => {
+            setCartData(data);
+        });
+    }
+
+    const plusItem = (id) => {
+        router.post(`/cart/add`, { product_id: id });
+        fetchCart().then((data) => {
+            setCartData(data);
+        });
+    }
+
+    const minusItem = (id) => {
         router.post(`/cart/remove`, { product_id: id });
         fetchCart().then((data) => {
             setCartData(data);
@@ -278,6 +294,9 @@ export function NavBar({}) {
                             <a href="/about-us" className={classes.link}>
                                 Over ons
                             </a>
+                            <a href="/contact" className={classes.link}>
+                                Contact
+                            </a>
                             <HoverCard.Dropdown style={{overflow: 'hidden'}}>
                                 <Group justify="space-between" px="md">
                                     <Text fw={500}>Fietsen per categorie</Text>
@@ -293,20 +312,22 @@ export function NavBar({}) {
                                 </SimpleGrid>
 
                                 {!loggedIn && (
-                                <div className={classes.dropdownFooter}>
-                                    <Group justify="space-between">
-                                        <div>
-                                            <Text fw={500} fz="sm">
-                                                Login of registreer om te bestellen
-                                            </Text>
-                                            <Text size="xs" c="dimmed">
-                                                Registreer nu en ontvang 10% korting op je eerste bestelling!
-                                            </Text>
-                                        </div>
-                                            <Button variant="default" style={{ backgroundColor: '#1c64f2', color: 'white' }}>Login</Button>
-                                            <Button style={{ backgroundColor: '#1c64f2', color: 'white' }}>Registreer</Button>
-                                    </Group>
-                                </div>
+                                    <div className={classes.dropdownFooter}>
+                                        <Group justify="space-between">
+                                            <div>
+                                                <Text fw={500} fz="sm">
+                                                    Login of registreer om te bestellen
+                                                </Text>
+                                                <Text size="xs" c="dimmed">
+                                                    Registreer nu en ontvang 10% korting op je eerste bestelling!
+                                                </Text>
+                                            </div>
+                                            <Button variant="default"
+                                                    style={{backgroundColor: '#1c64f2', color: 'white'}}>Login</Button>
+                                            <Button
+                                                style={{backgroundColor: '#1c64f2', color: 'white'}}>Registreer</Button>
+                                        </Group>
+                                    </div>
                                 )}
                             </HoverCard.Dropdown>
                         </HoverCard>
@@ -370,57 +391,69 @@ export function NavBar({}) {
             <Drawer opened={opened} onClose={close} title="Winkelwagen" position="right">
                 <ScrollArea h="calc(100vh - 80px)" mx="-md">
                     <SimpleGrid cols={1} spacing="md">
-                        {cartData.length === 0 && (
+                        {cartData.length === 0 ? (
                             <Text align="center" color="dimmed">Uw winkelwagen is leeg😢</Text>
-                        )}
-                        {cartData.map((item) => (
-                            <Group key={item.id} justify="space-between" align="center" className="p-4 rounded-md">
-                                <Group align="center">
-                                    <Image
-                                        src={item.image ? `/${item.image}` : noImage}
-                                        alt={item.name}
-                                        width={20}
-                                        height={20}
-                                        onError={(e) => {
-                                            e.target.onerror = null;
-                                            e.target.src = noImage;
-                                        }}
-                                        style={{
-                                            objectFit: 'cover',
-                                            width: '100%',
-                                            height: '200px',
-                                            display: 'block',
-                                            margin: 'auto',
-                                        }}
-                                    />
-                                    <Text>{item.name}</Text>
+                        ) : (
+                            cartData.map((item) => (
+                                <Group key={item.id} justify="space-between" align="center" className="p-4 rounded-md">
+                                    <Group align="center">
+                                        <Image
+                                            src={item.image ? `/${item.image}` : noImage}
+                                            alt={item.name}
+                                            width={20}
+                                            height={20}
+                                            onError={(e) => {
+                                                e.target.onerror = null;
+                                                e.target.src = noImage;
+                                            }}
+                                            style={{
+                                                objectFit: 'cover',
+                                                width: '100%',
+                                                height: '200px',
+                                                display: 'block',
+                                                margin: 'auto',
+                                            }}
+                                        />
+                                        <Text>{item.name}</Text>
+                                    </Group>
+                                    <Text>{item.quantity}x</Text>
+                                    <Text>€{Number(item.price).toFixed(2)}</Text>
+                                    <div className="flex gap-4">
+                                        <div className="flex gap-2">
+                                            <IconPlus size={20} color="#1c64f2" className="cursor-pointer hover:scale-110 transition-all" onClick={() => { plusItem(item.id) }} />
+                                            <IconMinus size={20} color="#1c64f2" className="cursor-pointer hover:scale-110 transition-all" onClick={() => { minusItem(item.id) }} />
+                                        </div>
+                                        <IconTrash size={20} color="red" className="cursor-pointer hover:scale-110 transition-all" onClick={() => { removeItem(item.id) }} />
+                                    </div>
                                 </Group>
-                                <Text>{item.quantity}x</Text>
-                                <Text>€{Number(item.price).toFixed(2)}</Text>
-                                <IconTrash size={20} color="red" className="cursor-pointer hover:scale-110 transition-all" onClick={() => { removeItem(item.id) }} />
-                            </Group>
-                        ))}
+                            ))
+                        )}
                     </SimpleGrid>
                     <Divider my="md" />
-                    <Group justify="space-between" className="sticky bottom-0 bg-white dark:bg-gray-800 p-4 rounded-t-md">
-                        <div>
-                            <Text>Subtotaal:</Text>
-                            <Text color="lightgreen">Korting:</Text>
-                        </div>
-                        <div>
-                            <Text>€{cartData.reduce((acc, item) => acc + item.price * item.quantity, 0).toFixed(2)}</Text>
-                            <Text color="lightgreen">€{saleAmount.toFixed(2)}</Text>
-                        </div>
-                    </Group>
-                    <Button
-                        variant="filled"
-                        color="#1c64f2"
-                        fullWidth
-                        mt="md"
-                        onClick={() => { document.location.href = "/checkout" }}
-                    >
-                        Afrekenen
-                    </Button>
+                    {cartData.length > 0 && (
+                        <>
+                            <Divider my="md" />
+                            <Group justify="space-between" className="sticky bottom-0 bg-white dark:bg-gray-800 p-4 shadow-md">
+                                <div>
+                                    <Text>Subtotaal:</Text>
+                                    <Text color="lightgreen">Korting:</Text>
+                                </div>
+                                <div>
+                                    <Text>€{cartData.reduce((acc, item) => acc + item.price * item.quantity, 0).toFixed(2)}</Text>
+                                    <Text color="lightgreen">€{saleAmount.toFixed(2)}</Text>
+                                </div>
+                            </Group>
+                            <Button
+                                variant="filled"
+                                color="#1c64f2"
+                                fullWidth
+                                mt="md"
+                                onClick={() => { document.location.href = "/checkout" }}
+                            >
+                                Afrekenen
+                            </Button>
+                        </>
+                    )}
                 </ScrollArea>
             </Drawer>
             )}

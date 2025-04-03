@@ -36,7 +36,7 @@ export default function AdminDashboard() {
 
     return (
         <nav className={classes.navbar}>
-            <div className={classes.navbarMain}>
+            <div>
                 <Group justify="center">
                     <Image src={Logo} alt="OJFP Logo" className="w-10 h-10 cursor-pointer" onClick={() => {
                         document.location.href = '/';

@@ -114,39 +114,51 @@ export default function Products({ products, categories }) {
                     Voeg product toe
                 </Button>
                 <SimpleGrid cols={3} spacing="lg" className="mt-4">
-                    {products.map((product) => (
-                        <Card shadow="sm" padding="lg" radius="md" withBorder key={product.id}>
-                            <img
-                                src={product.image ? `/${product.image}` : noImage}
-                                alt={product.name}
-                                onError={(e) => {
-                                    e.target.onerror = null;
-                                    e.target.src = noImage;
-                                }}
-                                style={{
-                                    objectFit: 'cover',
-                                    width: '100%',
-                                    height: '200px',
-                                    display: 'block',
-                                    margin: 'auto',
-                                }}
-                            />
-                            <Title order={4} className="mt-4">{product.name}</Title>
-                            <p className="text-gray-600">{product.description}</p>
-                            <p className="text-indigo-600 font-bold mt-2">
-                                €{Number(product.price).toFixed(2)}
-                            </p>
-                            <p className="text-red-600">Korting: {product.sale}%</p>
-                            <p className="text-gray-500">Voorraad: {product.stock}</p>
-                            <p className="text-gray-500">
-                                Categorie: {categories.find(category => category.id === product.category_id)?.name ?? 'Geen'}
-                            </p>
-                            <div className="flex justify-between mt-4">
-                                <Button size="xs" color="#1c64f2" leftSection={<IconEdit size={14} />} onClick={() => editProduct(product.id)}>Bewerk</Button>
-                                <Button size="xs" color="red" leftSection={<IconTrash size={14} />} onClick={() => handleDeleteClick(product.id)}>Verwijder</Button>
-                            </div>
-                        </Card>
-                    ))}
+                    {products.length > 0 ? (
+                        products.map((product) => (
+                            <Card shadow="sm" padding="lg" radius="md" withBorder key={product.id}>
+                                <img
+                                    src={product.image ? `/${product.image}` : noImage}
+                                    alt={product.name}
+                                    onError={(e) => {
+                                        e.target.onerror = null;
+                                        e.target.src = noImage;
+                                    }}
+                                    style={{
+                                        objectFit: 'cover',
+                                        width: '100%',
+                                        height: '200px',
+                                        display: 'block',
+                                        margin: 'auto',
+                                    }}
+                                />
+                                <Title order={4} className="mt-4">{product.name}</Title>
+                                <p className="text-gray-600 line-clamp-4">{product.description}</p>
+                                <p className="text-indigo-600 font-bold mt-2">
+                                    {product.sale > 0 ? (
+                                        <span>
+                        <span className="line-through text-red-500">€{Number(product.price).toFixed(2)}</span> €{Number(product.price - (product.price * product.sale / 100)).toFixed(2)}
+                    </span>
+                                    ) : (
+                                        <span>€{Number(product.price).toFixed(2)}</span>
+                                    )}
+                                </p>
+                                <p className="text-red-600">Korting: {product.sale}%</p>
+                                <p className="text-gray-500">Voorraad: {product.stock}</p>
+                                <p className="text-gray-500">
+                                    Categorie: {categories.find(category => category.id === product.category_id)?.name ?? 'Geen'}
+                                </p>
+                                <div className="flex justify-between mt-4">
+                                    <Button size="xs" color="#1c64f2" leftSection={<IconEdit size={14} />} onClick={() => editProduct(product.id)}>Bewerk</Button>
+                                    <Button size="xs" color="red" leftSection={<IconTrash size={14} />} onClick={() => handleDeleteClick(product.id)}>Verwijder</Button>
+                                </div>
+                            </Card>
+                        ))
+                    ) : (
+                        <div className="flex items-center justify-center h-64">
+                            <p className="text-gray-500">Geen producten gevonden.</p>
+                        </div>
+                    )}
                 </SimpleGrid>
             </div>
 

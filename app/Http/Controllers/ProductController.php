@@ -98,6 +98,19 @@ class ProductController extends Controller
         return redirect()->back()->with('success', 'Product verwijderd uit winkelwagen');
     }
 
+    public function deleteFromCart(Request $request)
+    {
+        $cart = session()->get('cart', []);
+
+        if (isset($cart[$request->product_id])) {
+            unset($cart[$request->product_id]);
+        }
+
+        session()->put('cart', $cart);
+
+        return redirect()->back()->with('success', 'Product verwijderd uit winkelwagen');
+    }
+
     public function getCart()
     {
         return session()->get('cart', []);

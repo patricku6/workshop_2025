@@ -5,6 +5,7 @@ import '@mantine/carousel/styles.css';
 import Template from "./Template.jsx";
 import Autoplay from 'embla-carousel-autoplay';
 import { useRef } from "react";
+import {router} from "@inertiajs/react";
 
 export default function Home() {
     const autoplay = useRef(Autoplay({ delay: 2000 }));
@@ -54,36 +55,36 @@ export default function Home() {
                 </Carousel>
 
                 {/* Producten Sectie */}
-                <Title order={2} mt="xl" color="#1c64f2">Onze Populaire Fietsen</Title>
+                <Title order={2} mt="xl" color="#1c64f2">Onze Populaire Merken</Title>
                 <Grid mt="md">
                     <Grid.Col span={4}>
-                        <Card shadow="sm" padding="lg" radius="md" withBorder className="hover:scale-105 transition-all">
-                            <Card.Section>
-                                <Image src="https://plus.unsplash.com/premium_photo-1678718713393-2b88cde9605b?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Racefiets" />
+                        <Card shadow="sm" padding="lg" radius="md" withBorder className="hover:scale-105 transition-all h-full flex flex-col">
+                            <Card.Section className="h-48 flex justify-center items-center">
+                                <Image src="../../images/gazelle.jpg" alt="Gazelle" className="h-full w-full object-cover" />
                             </Card.Section>
                             <Text weight={500} mt="md">Gazelle</Text>
-                            <Text size="sm" color="dimmed">Want dat is echt gezellig</Text>
-                            <Button variant="filled" mt="md" fullWidth color="#1c64f2">Bekijk</Button>
+                            <Text size="sm" color="dimmed" className="flex-grow">Want dat is echt gezellig</Text>
+                            <Button variant="filled" mt="md" fullWidth color="#1c64f2" onClick={() => router.visit('/products/gazelle')}>Bekijk</Button>
                         </Card>
                     </Grid.Col>
                     <Grid.Col span={4}>
-                        <Card shadow="sm" padding="lg" radius="md" withBorder className="hover:scale-105 transition-all">
-                            <Card.Section>
-                                <Image src="https://plus.unsplash.com/premium_photo-1671148894611-3c91b6d3c92a?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8bW91bnRhaW4lMjBiaWtlfGVufDB8fDB8fHww" alt="Mountainbike" />
+                        <Card shadow="sm" padding="lg" radius="md" withBorder className="hover:scale-105 transition-all h-full flex flex-col">
+                            <Card.Section className="h-48 flex justify-center items-center">
+                                <Image src="../../images/giant.jpg" alt="Giant" className="h-full w-full object-cover" />
                             </Card.Section>
                             <Text weight={500} mt="md">Giant</Text>
-                            <Text size="sm" color="dimmed">Voor de echte timos</Text>
-                            <Button variant="filled" mt="md" fullWidth color="#1c64f2">Bekijk</Button>
+                            <Text size="sm" color="dimmed" className="flex-grow">Voor de echte timos</Text>
+                            <Button variant="filled" mt="md" fullWidth color="#1c64f2" onClick={() => router.visit('/products/giant')}>Bekijk</Button>
                         </Card>
                     </Grid.Col>
                     <Grid.Col span={4}>
-                        <Card shadow="sm" padding="lg" radius="md" withBorder className="hover:scale-105 transition-all">
-                            <Card.Section>
-                                <Image src="https://images.unsplash.com/photo-1632082565410-a692ab2537c4?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTl8fG9tYSUyMGZpZXRzfGVufDB8fDB8fHww" alt="Stadsfiets" />
+                        <Card shadow="sm" padding="lg" radius="md" withBorder className="hover:scale-105 transition-all h-full flex flex-col">
+                            <Card.Section className="h-48 flex justify-center items-center">
+                                <Image src="../../images/batavus.jpg" alt="Stadsfiets" className="h-full w-full object-cover" />
                             </Card.Section>
-                            <Text weight={500} mt="md">Stadsfiets</Text>
-                            <Text size="sm" color="dimmed">Comfortabel en stijlvol door de stad</Text>
-                            <Button variant="filled" mt="md" fullWidth color="#1c64f2">Bekijk</Button>
+                            <Text weight={500} mt="md">Batavus</Text>
+                            <Text size="sm" color="dimmed" className="flex-grow">De perfecte stadsfiets</Text>
+                            <Button variant="filled" mt="md" fullWidth color="#1c64f2" onClick={() => router.visit('/products/batavus')}>Bekijk</Button>
                         </Card>
                     </Grid.Col>
                 </Grid>

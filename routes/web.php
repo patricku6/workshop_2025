@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Middleware\VerifyAdmin;
@@ -26,6 +27,11 @@ Route::get('/about-us', function () {
     return Inertia::render('AboutUs');
 })->name('about-us');
 
+Route::get('/contact', function () {
+    return Inertia::render('Contact');
+})->name('contact');
+
+Route::post('/contact/send', [MessageController::class, 'sendMessage'])->name('contact.send');
 
 Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index')->middleware('auth');
 
@@ -39,6 +45,7 @@ Route::get('/categories', [CategoryController::class, 'fetchCategories'])->name(
 Route::post('cart/add', [ProductController::class, 'addToCart'])->name('cart.add');
 Route::get('cart/get', [ProductController::class, 'getCart'])->name('cart.get');
 Route::post('cart/remove', [ProductController::class, 'removeFromCart'])->name('cart.remove');
+Route::post('cart/delete', [ProductController::class, 'deleteFromCart'])->name('cart.delete');
 
 Route::post('/profile-update', [ProfileController::class, 'update'])->name('profile.update');
 

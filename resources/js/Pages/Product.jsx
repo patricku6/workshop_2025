@@ -1,4 +1,4 @@
-import {Container, Title, Text, Button, Grid, Card, Image, TextInput, Group, NumberInput} from '@mantine/core';
+import {Container, Title, Text, Button, Grid, Card, Image, TextInput, Group, NumberInput, Badge} from '@mantine/core';
 import Template from './Template.jsx';
 import { IconArrowBack } from '@tabler/icons-react';
 import {router} from "@inertiajs/react";
@@ -57,9 +57,6 @@ export default function ProductDetailPage({ product, category }) {
                     >
                         Terug naar producten
                     </Button>
-                    <Title align="center" color="#1c64f2">
-                        {product.name}
-                    </Title>
                 </Group>
 
                 <Grid gutter="xl" align="center">
@@ -85,7 +82,18 @@ export default function ProductDetailPage({ product, category }) {
                         <Card shadow="sm" padding="lg" radius="md" withBorder>
                             <Text weight={500} size="xl">{product.name}</Text>
                             <Text size="sm" color="dimmed" mt="sm">{product.description}</Text>
-                            <Text weight={500} mt="md" size="lg">€{product.price},00</Text>
+                            <Text mt="md" size="lg" className="text-indigo-600 font-bold mt-2">
+                                {product.sale > 0 ? (
+                                    <span>
+                                        <Badge mb="sm" variant="outline" color="lightgreen">{product.sale}% korting</Badge>
+                                        <br />
+                                        <span
+                                            className="line-through text-red-500">€{Number(product.price).toFixed(2)}</span> €{Number(product.price - (product.price * product.sale / 100)).toFixed(2)}
+                                    </span>
+                                ) : (
+                                    <span>€{Number(product.price).toFixed(2)}</span>
+                                )}
+                            </Text>
                             <Text size="sm" color="dimmed" mt="sm">Categorie: {category.name}</Text>
                             <Text size="sm" color="dimmed" mt="sm">Beschikbare voorraad: {product.stock}</Text>
 

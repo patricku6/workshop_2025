@@ -10,6 +10,7 @@ import classes from '../../css/FeatureCard.module.css';
 export default function ProductPage({ products, categories, search = null, category = null }) {
     const [searchTerm, setSearchTerm] = useState('');
     const [opened, setOpened] = useState(false);
+    const [categoryOpened, setCategoryOpened] = useState(false);
     const [loggedIn, setLoggedIn] = useState(false);
 
     const [title, setTitle] = useState(search !== null ? "Resultaten voor '" + search + "'" : (category !== null ? category || "Onze Fietsen" : "Onze Fietsen"));
@@ -144,7 +145,14 @@ export default function ProductPage({ products, categories, search = null, categ
                                 label: category.name,
                             }))}
                             fullWidth
-                            rightSection={<IconChevronDown size={18} color="#1c64f2" />}
+                            rightSection={<IconChevronDown
+                                size={18}
+                                color="#1c64f2"
+                                style={{ transform: categoryOpened ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.2s ease" }}
+                            />
+                        }
+                            onDropdownOpen={() => setCategoryOpened(true)}
+                            onDropdownClose={() => setCategoryOpened(false)}
                         />
                     </Grid.Col>
 
@@ -193,13 +201,13 @@ export default function ProductPage({ products, categories, search = null, categ
                                                 {categories.find((category) => category.id === product.category_id)?.name || 'Geen'}
                                             </Text>                                        </div>
                                         {product.sale > 0 &&(
-                                            <Badge variant="outline" color="lightgreen">{product.sale}% off</Badge>
+                                            <Badge variant="outline" color="lightgreen">{product.sale}% korting</Badge>
                                         )}
                                     </Group>
 
                                     <Card.Section className={classes.section} mt="md">
                                         <Text fz="sm" c="dimmed" className={classes.label}>Beschrijving</Text>
-                                        <Text>{product.description}</Text>
+                                        <Text className="line-clamp-4">{product.description}</Text>
                                         <Group gap={8} mb={-8}>
 
                                         </Group>
@@ -209,7 +217,16 @@ export default function ProductPage({ products, categories, search = null, categ
                                         <Group gap={30}>
                                             <div>
                                                 <Text fz="sm" c="dimmed" mt="sm">{product.stock} op voorraad</Text>
-                                                <Text weight={500} mt="md">€{product.price},00</Text>
+                                                <Text className="text-indigo-600 font-bold mt-2">
+                                                    {product.sale > 0 ? (
+                                                        <span>
+                                                            <span
+                                                                className="line-through text-red-500">€{Number(product.price).toFixed(2)}</span> €{Number(product.price - (product.price * product.sale / 100)).toFixed(2)}
+                                                        </span>
+                                                    ) : (
+                                                        <span>€{Number(product.price).toFixed(2)}</span>
+                                                    )}
+                                                </Text>
                                             </div>
 
                                             <Button
@@ -219,7 +236,7 @@ export default function ProductPage({ products, categories, search = null, categ
                                                 fullWidth
                                                 color="#1c64f2"
                                                 radius="xl"
-                                                style={{ flex: 1 }}
+                                                style={{flex: 1}}
                                                 disabled={product.stock <= 0}
                                             >
                                                 Bekijk dit product
